@@ -1,0 +1,349 @@
+---
+title: "Q2 Term Paper"
+author: "Ding Yang Wang"
+date: '2022-06-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(ggplot2)
+library(patchwork)
+library(tidyverse)
+library(RColorBrewer)
+require(sf)
+library(plyr)
+library(knitr)
+library(maptools)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+# Data Preperation
+
+```{r}
+Germany_health <- read.csv("/Users/deweywang/Desktop/LMU/2\ -\ semester/Pretty\ Plots\ -\ Visualizing\ Statistical\ Data/final\ assignment/Data\ for\ termpaper-20220528/Germany_overall_health.csv")
+
+colnames(Germany_health)[1:2] <- c("state", "state id")
+```
+
+
+## Q2: (a) Visualize the data in a way that allows the viewer to assess the impact of education level and gender. Describe in your own words what has the bigger impact on the perceived health: Gender or education level.
+
+Data preparation: 
+```{r, results='asis'}
+edu_gender <- Germany_health %>%
+  filter(state == "Deutschland" & Standard == 1 & age_group == "Gesamt" & education != "all" & gender != "both")
+```
+
+```{r, results='asis'}
+edu_gender$education <- factor(edu_gender$education, 
+                              levels = c("basic", "intermediate", "advanced"))
+
+
+edu_gender_Fig <- edu_gender %>% ggplot(aes(x = education, y = Percent,fill = education))+
+  geom_col() +
+  facet_grid(~gender)+
+  geom_errorbar(aes(ymin=LowerCL, ymax=UpperCL),
+                width=.2,                    # Width of the error bars
+                position=position_dodge(.9))  +
+  geom_text(aes(label = round(UpperCL, digits = 2), y = UpperCL), vjust = -.5, size = 3) +
+  geom_text(aes(label = round(LowerCL, digits = 2), y = LowerCL), vjust = 1.5, size = 3) +
+  theme(legend.position = "none", 
+        plot.title=element_text(hjust = 0.5, size = rel(1.2)), 
+        axis.text        = element_text(colour = "black", size = rel(0.8)),
+        axis.ticks       = element_line(colour = "black", size = rel(0.1)),
+        # NB: match the *visual* thickness of axis ticks to the panel border
+        #     0.5 clipped looks like 0.25
+        
+        # pure black panel border and grid lines, but thinner
+        panel.background = element_blank(),
+        panel.border     = element_rect(fill = NA, colour = "black", size = rel(1)),
+        panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)),
+        
+        # strips with black background and white text
+        strip.background = element_rect(fill = "black"),
+        strip.text       = element_text(
+          colour = "white",
+          size = rel(1),
+          margin = margin(0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5)
+        )
+        )+
+  scale_fill_brewer("Dark2") +
+  labs(y = "Percent",
+       x = "Education Level",
+       title = "Health assessment by education level and gender")
+
+edu_gender_Fig + 
+  plot_annotation(
+    title = 'Figure 1',
+    caption = "* Percent = Percentage of participants who evaluated their overall health as good.\n
+                  * Error bar repersents the confidence interval")
+```
+
+**Answer:** From Fig.1, we can easily observe that there is more significant difference between the education level. Hence, I think the education level has a bigger impact on perceived health than gender.
+
+
+## Q2: (b) Make another plot that assess differences between age groups and genders.
+
+Data preparation: 
+Here, I didn't use  Standard == 1 is because we can only find Standard == 0 in the raw data.
+```{r}
+age_gender <- Germany_health %>% filter(state == "Deutschland" & Standard == 0 & age_group != "Gesamt" & education == "all" & gender != "both")
+```
+
+```{r,  fig.width = 10, fig.height = 6, results='asis'}
+age_gender_Fig <- age_gender %>% ggplot(aes(x = age_group, y = Percent,fill = age_group))+
+  geom_col() +
+  facet_grid(~gender)+
+  geom_errorbar(aes(ymin=LowerCL, ymax=UpperCL),
+                width=.2,                    # Width of the error bars
+                position=position_dodge(.9))  +
+  geom_text(aes(label = round(UpperCL, digits = 2), y = UpperCL), vjust = -.5, size = 3) +
+  geom_text(aes(label = round(LowerCL, digits = 2), y = LowerCL), vjust = 1.5, size = 3) +
+  theme(legend.position = "none", 
+        plot.title=element_text(hjust = 0.5, size = rel(1.2)), 
+        axis.text        = element_text(colour = "black", size = rel(0.8)),
+        axis.ticks       = element_line(colour = "black", size = rel(0.1)),
+        # NB: match the *visual* thickness of axis ticks to the panel border
+        #     0.5 clipped looks like 0.25
+        
+        # pure black panel border and grid lines, but thinner
+        panel.background = element_blank(),
+        panel.border     = element_rect(fill = NA, colour = "black", size = rel(1)),
+        panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)),
+        
+        # strips with black background and white text
+        strip.background = element_rect(fill = "black"),
+        strip.text       = element_text(
+          colour = "white",
+          size = rel(1),
+          margin = margin(0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5)
+        )
+  )+
+  scale_fill_brewer("Dark2",   direction = -1) +
+  labs(y = "Percent",
+       x = "Age group",
+       title = "Health assessment by age and gender")
+
+age_gender_Fig+ 
+  plot_annotation(
+    title = 'Figure 2',
+    caption = "* Percent = Percentage of participants who evaluated their overall health as good.\n
+                  * Error bar repersents the confidence interval")
+
+```
+**Answer:** From Fig.2, it shows that there is more significant difference between different age group. Thus, I think the age has a bigger impact on perceived health than gender.
+
+
+## Q2: (c) Are there still differences between the ’old’ and the ’new’ Bundesländer (former Eastern Germany: Mecklenburg- Vorpommern, Thüringen, Sachsen-Anhalt, Brandenburg, Sachsen). Depict the percentage of people who assess their health as good in the context of a map of Germany.
+
+Here, I filter out the data that has been standardized as the data to visualize in map plot because I use both gender with all age group.
+```{r, results='asis'}
+germany_all <- Germany_health %>% filter(state != "Deutschland" ,
+                                         gender == "both",
+                                         Standard == "1",
+                                         age_group == "Gesamt")
+```
+
+Here, I splite the map data into old Bundesländer and the rest of them to help me to easy to reconginze from the map plot.
+```{r, results='asis'}
+shape <- read_sf(dsn = "Data for termpaper-20220528/DEU_adm/", layer = "DEU_adm1")
+
+old <- shape %>% filter(NAME_1 == "Mecklenburg-Vorpommern" | NAME_1 == "Thüringen"|
+                NAME_1 ==  "Sachsen-Anhalt" | NAME_1 ==  "Sachsen"| 
+                NAME_1 =="Brandenburg")
+
+old_test <- old%>%
+  inner_join(germany_all,  by = c("NAME_1" = "state")) 
+
+new <- shape %>% filter(NAME_1 != "Mecklenburg-Vorpommern" & NAME_1 != "Thüringen"&
+                          NAME_1 !=  "Sachsen-Anhalt" & NAME_1 !=  "Sachsen"&
+                          NAME_1 !="Brandenburg")
+new_test <- new%>%
+  inner_join(germany_all,  by = c("NAME_1" = "state")) 
+```
+
+I also want to mark the name of the state on the map plot. Thus, I need the center of lat and long in the state to put their name on it.
+```{r}
+Germany_id <- read.csv("Data for termpaper-20220528/DEU_adm/DEU_adm1.csv")
+
+shape_county_1 <- readShapeSpatial("Data for termpaper-20220528/DEU_adm/DEU_adm1.shp")
+
+germany_map <- fortify(shape_county_1)
+
+distcenters <- plyr::ddply(germany_map,"id", summarize, clat = mean(lat), clong = mean(long))
+
+distcenters$id <- as.integer(distcenters$id)+1
+
+distcenters <- distcenters%>%
+  inner_join(Germany_id, by = c("id" ="ID_1"))
+```
+
+
+
+After having the lat and long of the state center, I adjust some of them to aviod over plotting.
+```{r}
+##for Brandenburg
+distcenters[10,2] <- 52.2
+
+##for Mecklenburg-Vorpommern
+distcenters[14,3] <- 12.5
+distcenters[14,2] <- 53.8
+
+##for Schleswig-Holstein
+distcenters[7,3] <- 9.85
+distcenters[7,2] <- 54
+
+##for Niedersachsen
+distcenters[15,3] <- 8.9
+distcenters[15,2] <- 52.8
+##for Baden-Württemberg
+distcenters[1,3] <- 8.89
+distcenters[1,2] <- 48.5
+```
+
+Eventually, I make a map plot that can easily recongize which states are old Bundesländer.
+```{r, results='asis', fig.height = 6, fig.width= 6}
+map_Geramny_assessment<- ggplot() + 
+  geom_sf(data = new_test, aes(fill = Percent)) + 
+  geom_sf(data = old_test, aes(fill = Percent), color = "#FF7575") + 
+  scale_fill_gradientn(colours  = brewer.pal(9,"Blues"))+
+  theme(
+        plot.title=element_text(hjust = 0.5, size = rel(1.2)), 
+    axis.ticks      = element_blank(),
+      legend.background = element_blank(),
+      legend.key        = element_blank(),
+      panel.background  = element_blank(),
+      panel.border      = element_blank(),
+      strip.background  = element_blank(),
+      plot.background   = element_blank(),
+      panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)))+
+  labs(x = "Long",
+       y = "Lat",
+       caption = "* Percent = Percentage of participants who evaluated their overall health as good.\n*Red line areas are old Bundesländer.",
+       title = "Germany heath assessment")
+
+map_Geramny_assessment +   
+  geom_text(data = distcenters, aes(x = clong, y = clat, label = NAME_1), size = 3)+
+  plot_annotation(
+    title = 'Figure 3')
+```
+**Answer:** From Fig.3, we can easily know that the citizens in the old Bundesländer area commonly have a lower percentage of thinking their overall health assessment as good than the citizens in the new Bundesländer.
+
+
+## Q2: (d) Arrange all 3 plots in a panel. Don’t forget the figure legend with your interpretations.
+
+```{r plot1,  fig.width = 20, fig.height = 17, results='asis'}
+edu_gender_Fig <- edu_gender_Fig+
+  theme(legend.position = "none", 
+        plot.title=element_text(hjust = 0.5, size = rel(1.7)), 
+        axis.text        = element_text(colour = "black", size = rel(1)),
+        axis.ticks       = element_line(colour = "black", size = rel(0.1)),
+        axis.title = element_text(colour = "black", size = rel(1.5)),
+
+        # NB: match the *visual* thickness of axis ticks to the panel border
+        #     0.5 clipped looks like 0.25
+        
+        # pure black panel border and grid lines, but thinner
+        panel.background = element_blank(),
+        panel.border     = element_rect(fill = NA, colour = "black", size = rel(1)),
+        panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)),
+        
+        # strips with black background and white text
+        strip.background = element_rect(fill = "black"),
+        strip.text       = element_text(
+          colour = "white",
+          size = rel(1.5),
+          margin = margin(0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5)
+        )
+  )
+
+age_gender_Fig <- age_gender_Fig + labs(caption = "* Error bar repersents the confidence interval")+
+  guides( x= guide_axis(n.dodge = 2))+
+  theme(legend.position = "none", 
+        plot.caption = element_text(size = rel(1.5)),
+        plot.title=element_text(hjust = 0.5, size = rel(1.7)), 
+        axis.text        = element_text(colour = "black", size = rel(1)),
+        axis.ticks       = element_line(colour = "black", size = rel(0.1)),
+        axis.title = element_text(colour = "black", size = rel(1.5)),
+        # NB: match the *visual* thickness of axis ticks to the panel border
+        #     0.5 clipped looks like 0.25
+        
+        # pure black panel border and grid lines, but thinner
+        panel.background = element_blank(),
+        panel.border     = element_rect(fill = NA, colour = "black", size = rel(1)),
+        panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)),
+        
+        # strips with black background and white text
+        strip.background = element_rect(fill = "black"),
+        strip.text       = element_text(
+          colour = "white",
+          size = rel(1.5),
+          margin = margin(0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5, 0.8 * 5.5)
+        )
+  )
+
+map_Geramny_assessment <- map_Geramny_assessment+
+  geom_text(data = distcenters, aes(x = clong, y = clat, label = NAME_1), size = 6)+
+  theme(        plot.caption = element_text(size = rel(1.5)),
+    axis.ticks      = element_blank(),
+    axis.text        = element_text(colour = "black", size = rel(1)),
+    legend.key.size = unit(2, 'cm'),
+    legend.text = element_text(colour = "black", size = rel(2)),
+    legend.title = element_text(colour = "black", size = rel(2)),
+            axis.title = element_text(colour = "black", size = rel(1.5)),
+            plot.title=element_text(hjust = 0.5, size = rel(1.7)), 
+      legend.background = element_blank(),
+      legend.key        = element_blank(),
+      panel.background  = element_blank(),
+      panel.border      = element_blank(),
+      strip.background  = element_blank(),
+      plot.background   = element_blank(),
+      panel.grid       = element_line(colour = "black"),
+        panel.grid.major = element_line(size = rel(0.1)),
+        panel.grid.minor = element_line(size = rel(0.05)))+
+  labs(title = "Germany heath assessment")
+
+((edu_gender_Fig/age_gender_Fig)| map_Geramny_assessment)+ 
+  plot_annotation(
+    title = 'Figure 4',
+    tag_levels = 'A') &
+  theme(plot.title = element_text(size = 27),
+                plot.tag = element_text(size = 20))
+```
+
+Fig. 4: Plot A and Plot B show the percent difference under different factors. Plot C shows the percentage in different states in Germany.
+
+
+# Packages & R verion 
+
+The package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

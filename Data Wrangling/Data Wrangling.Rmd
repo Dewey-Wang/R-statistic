@@ -1,0 +1,229 @@
+---
+title: "Day 1 homework by Ding Yang Wang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(knitr)
+library(readr)
+
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+
+```
+
+# Q1: Join the data so that cases and deaths are in one tibble together.
+
+Use the `readr` function read cases and deaths csv file. The files contained the case numbers and the death numbers from COVID-19.
+
+**cases file:**
+https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
+
+**deaths file:**
+https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv
+
+```{r Table1, results='asis'}
+case <- read_delim("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", delim = ",")
+
+change_name <- colnames(case[,-c(1:4)])
+for (i in 1:length(change_name)) {
+  change_name[i] <- paste( change_name[i], "cases", sep = ".")
+}
+colnames(case)[5:length(case)] <- change_name[1:length(change_name)]
+
+deaths <- read_delim("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", delim = ",")
+
+change_name <- colnames(deaths[,-c(1:4)])
+
+for (i in 1:length(change_name)) {
+  change_name[i] <- paste( change_name[i], "deaths", sep = ".")
+}
+colnames(deaths)[5:length(deaths)] <- change_name[1:length(change_name)]
+
+case_death <- full_join(case,deaths,
+                        by = c("Province/State",
+                               "Country/Region",
+                               "Lat",
+                               "Long"))
+## use full_join to ensure everything merge together. The "by" is important to avoid mismatch.
+
+kable(head(case_death[,1:4]), caption = "Table 1: Merge cases and deaths into one table.")
+```
+
+# Q2: Identify the 3 countries with the highest number of total cases as of 2022-05-01.
+
+Instead of having one entry per country per day, certain countries have their constitutive states/provinces reported separately. Thus, we have to seperate the task into several steps.
+
+**First**
+
+Find out the repeatly reported countries.
+```{r}
+uni_country <- unique(case$`Country/Region`)
+b <- case$`Country/Region`
+repeat_name <- c()
+## the for loop and the unique function below is to see all the countries that repeatly appear in the list
+for (i in 1:198){
+  for (z in 1:284){
+    if (uni_country[i] == b[z]){
+      if(z != 284){
+        z = z+1
+        if (uni_country[i] == b[z]){
+          repeat_name <- append(repeat_name, b[z])
+        }
+      }
+    }
+  }
+}
+repeat_name <- unique(repeat_name)
+```
+
+**Second**
+
+Get the total case numbers on 2022-05-01 and make them into data frame.
+```{r}
+country_total <- c()
+total = 0
+## the for loop below is to see the total cases number that 
+## occur in the countries that have repeatly appear
+for (i in 1:length(repeat_name)) {
+  num <- which(case$`Country/Region` == repeat_name[i])
+  for (a in 1:length(num)) {
+    total = case$`5/1/22.cases`[num[a]] + total
+  }
+  country_total <- append(country_total, total)
+  total = 0
+}
+
+repeat_country <- data.frame(Country = repeat_name,
+                             case_number = country_total)
+```
+
+**Third**
+
+Find out the total case numbers of non-repeatly reported countries on 2022-05-01.
+```{r}
+no_repeat_country <- uni_country
+list_of_repeat <- c()
+## the funtion below is to see the total cases number that 
+## occur in the countries that don't repeatly appear
+for (i in 1:length(repeat_name)) {
+  list_of_repeat <-  append(list_of_repeat, which(no_repeat_country == repeat_name[i]))
+}
+no_repeat_country <- no_repeat_country[-list_of_repeat]
+
+num_of_nonrepeat <- c()
+for (i in 1:length(no_repeat_country)) {
+  num_of_nonrepeat <-  append(num_of_nonrepeat, case$`5/1/22.cases`[which(case$`Country/Region` == no_repeat_country[i])])
+}
+
+no_repeat_country_list <- data.frame(Country = no_repeat_country,
+                             case_number = num_of_nonrepeat)
+```
+
+**Fourth**
+
+Merge the data frame we found in 2nd step and 3rd step and print out the countries that have top 3 case numbers.
+```{r Table2, results='asis'}
+total_uni_case <- full_join(no_repeat_country_list, repeat_country)
+top_3 <- data.frame(Rank = c("1st","2nd","3rd"),
+                    Country = total_uni_case$Country[order(total_uni_case$case_number,decreasing = TRUE)[1:3]],
+                    case_numbers = total_uni_case$case_number[order(total_uni_case$case_number,decreasing = TRUE)[1:3]])
+kable(top_3, caption = "Table 2: Top 3 countries that have highest case numbers.")
+```
+
+# Q3: Choose Canada and China as two of the aforementioned countries, calculate the new cases and deaths per day for those countries as a whole, and report the average number of new cases and deaths for those countries for the last week.
+
+There are several ways to do it. For me, I first pick up all the data from Canada and China and add up all the case numbers and death numbers.
+```{r Table3, results='asis'}
+non_unique_case_death_Canada_China <- case_death[which(case_death$`Country/Region` == "China" | case$`Country/Region` == "Canada"), ]
+non_unique_case_death_Canada_China <- non_unique_case_death_Canada_China[,-c(1,3,4)] # All I need is the countries name and the number of case and death so I delete the columns that I don't need
+kable(non_unique_case_death_Canada_China[, 1:4], caption = "Table 3: non-unique case and death number in Canada and China")
+```
+As the table 3 shows, the country appears first is Canada. Thus, I first add up the case numbers and death numbers in Canada. Then, I add up the case numbers and death numbers in China.
+```{r Table4, results='asis'}
+num_Canada_China <- c()
+number_of_Canada <- sum(non_unique_case_death_Canada_China$`Country/Region` == "Canada")
+uni_case_death_Canada_China <- data.frame(Country = c("Canada", "China"))
+
+## the for loop below is to calculate the total cases and deaths number in Canada and China 
+for (i in 2:length(non_unique_case_death_Canada_China)) {
+  total_canada <- 0
+  total_china <- 0
+  for (a in 1:number_of_Canada) {
+    total_canada <- non_unique_case_death_Canada_China[a,i] + total_canada
+  }
+  for (a in (number_of_Canada + 1):length(non_unique_case_death_Canada_China$`Country/Region`)) {
+    total_china <- non_unique_case_death_Canada_China[a,i] + total_china
+  }
+  uni_case_death_Canada_China[colnames(non_unique_case_death_Canada_China)[i]] <- c(total_canada[,1],total_china[,1])
+  num_Canada_China <- c()
+}
+
+
+
+kable(uni_case_death_Canada_China[, 1:4], caption = "Table 4: unique case and death numbers in Canada and China")
+```
+
+We need to find the average number of new cases and deaths for those countries for the last week. Thus, we need to find out the data that from May 2nd 2022 (Monday) to May 8th 2022 (Sunday) and calculate the average.
+```{r Table5, results='asis'}
+average_cases <- c()
+total_case_canada <- 0
+for (i in which(colnames(uni_case_death_Canada_China) == "5/2/22.cases"):which(colnames(uni_case_death_Canada_China) == "5/8/22.cases")) {
+  total_case_canada <- uni_case_death_Canada_China[1,i] + total_case_canada
+}
+total_case_canada <- total_case_canada/7
+average_cases <- append(average_cases, total_case_canada)
+
+total_case_china <- 0
+for (i in which(colnames(uni_case_death_Canada_China) == "5/2/22.cases"):which(colnames(uni_case_death_Canada_China) == "5/8/22.cases")) {
+  total_case_china <- uni_case_death_Canada_China[2,i]+ total_case_china
+}
+total_case_china <- total_case_china/7
+average_cases <- append(average_cases, total_case_china)
+
+average_deaths <- c()
+total_deaths_canada <- 0
+for (i in which(colnames(uni_case_death_Canada_China) == "5/2/22.deaths"):which(colnames(uni_case_death_Canada_China) == "5/8/22.deaths")) {
+  total_deaths_canada <- uni_case_death_Canada_China[1,i] + total_deaths_canada
+}
+total_deaths_canada <- total_deaths_canada/7
+average_deaths <- append(average_deaths, total_deaths_canada)
+
+total_deaths_china <- 0
+for (i in which(colnames(uni_case_death_Canada_China) == "5/2/22.deaths"):which(colnames(uni_case_death_Canada_China) == "5/8/22.deaths")) {
+  total_deaths_china <- uni_case_death_Canada_China[2,i] + total_deaths_china
+}
+total_deaths_china <- total_deaths_china/7
+average_deaths <- append(average_deaths, total_deaths_china)
+
+last_week_average_Canada_China <- data.frame(Country = c("Canada", "China"),
+                                             Average_cases = average_cases,
+                                             Average_deaths = average_deaths
+                                             )
+
+kable(last_week_average_Canada_China, caption = "Table 5: Average case numbers and deaths numbers from Canada and China.")
+```
+
+# Packages & R verion 
+
+... include the package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

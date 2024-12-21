@@ -1,0 +1,149 @@
+---
+title: "Day 3 homework by Ding Yang Wang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(plyr)
+library(cowplot)
+library(dplyr)
+library(knitr)
+library(ggpubr)
+library(broom)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+
+## Q1: Do female and male BMIs for 2016 for America and Europe follow a normal distribution?
+
+
+Use `read.csv` to load the 2016 BMI data and use `filter` to filte out the `NA` data in the original 2016 BMI data. 
+```{r}
+raw_bmi_data <- read.csv("~/Desktop/LMU/2 - semester/Pretty Plots - Visualizing Statistical Data/Day 2/Data for barplots-20220511/bmi_2016.csv",
+                         header = TRUE)
+
+bmi_data <- raw_bmi_data %>% 
+  filter(!is.na(BMI))
+```
+
+Since I need to check whether the females and males in America and European is normal distribution or not, I need to do the normal distribution depends on their region and gender and then plot them,  America plot and European plot, together.
+
+**America**
+```{r}
+USA_bmi_data <- bmi_data %>% 
+  filter(REGION == "AMR")
+
+##length = 70 is because the data America sample number is 70
+grid_USA <- with(USA_bmi_data, seq(min(BMI), max(BMI), length = 70))
+
+##This will be used in drawing the normal distribution according their "sex"
+describeDist_USA <- ddply(USA_bmi_data, "sex", function(df) {
+  data.frame( 
+    BMI = grid_USA,
+    density = dnorm(grid_USA,
+                    mean(df$BMI, na.rm = T),
+                    sd(df$BMI, na.rm = T))
+  )
+})
+
+##plot density to see the normal distribution
+USA_dist <- USA_bmi_data %>% ggplot(aes(x = BMI, fill =sex))+ 
+  geom_density(alpha = 0.3) + 
+  ylab("density")+
+  geom_line(aes(y = density), data = describeDist_USA, colour = "red")+
+  ggtitle("USA")
+```
+
+**European**
+```{r}
+EU_bmi_data <- bmi_data %>% 
+  filter(REGION == "EUR")
+
+##length = 70 is because the data EU sample number is 200
+grid_EU <- with(EU_bmi_data, seq(min(BMI), max(BMI), length = 100))
+describeDist_EU <- ddply(EU_bmi_data, "sex", function(df) {
+  data.frame( 
+    BMI = grid_EU,
+    density = dnorm(grid_EU,
+                  mean(df$BMI, na.rm = T),
+                  sd(df$BMI, na.rm = T))
+)
+})
+
+EU_dist <- EU_bmi_data %>% ggplot(aes(x = BMI, fill =sex))+ 
+  geom_density(alpha = 0.3) + 
+  ylab("density")+
+  geom_line(aes(y = density), data = describeDist_EU, colour = "red")+
+  ggtitle("EU")
+  
+```
+
+**Plot two plots together**
+```{r plot1}
+plot_grid(EU_dist, USA_dist,   
+          ncol = 1)
+```
+**Q1 answer:** According to the graph above. The BNI of males and females in different region fellow the normal distribution.
+
+
+
+
+## Q2: Test whether BMIs differ significantly between the Americas and European? Which test did you use & why? Also make a statement about the effect size.
+
+To see whether the BMIs have significantly difference between Americas and European, we need to consider whether we need to use **t-test** or  **Wilcoxon-rank sum test**.
+
+**t-test** is only for the samples that is normal distribution.
+**Wilcoxon-rank sum test** is non-parametric version of the t-test.
+
+Thus, we need to first see whether the samples are normal distribution or not. There are several ways to see whether the samples are normal distribution or not. We will use **Shapiro-Wilk normality test** here. If function `shapiro.test` shows the p-value > 0.05, it means it is normal distribution.
+```{r plot2}
+USA_EU_bmi_data <- bmi_data %>% 
+  filter(REGION == "EUR" |REGION == "AMR")
+
+summary_BMI_EU_USA <- data.frame(EU =c(shapiro.test(EU_bmi_data$BMI)$statistic,
+                                       shapiro.test(EU_bmi_data$BMI)$p.value),
+                                 USA = c(shapiro.test(USA_bmi_data$BMI)$statistic,
+                                         shapiro.test(USA_bmi_data$BMI)$p.value)
+                                 )
+rownames(summary_BMI_EU_USA) <- c("statistic", "P-value")
+
+#ggtexttable function is from ggpubr package to plot the table
+ggtexttable(summary_BMI_EU_USA, theme = ttheme("light"))
+```
+**Q2 answer:** From the table above, it shows that the p-value is upper than 0.05. We can assume that the distribution is normal. Thus, we can use t-test to see the difference between region. Besides, because samples are from different regions, I assume they are independent cases; therefore, I won't use paired t-test here.
+```{r}
+t.test(BMI ~REGION, USA_EU_bmi_data)
+
+t_test_USA_EU <- data.frame(p_value =t.test(BMI ~REGION, USA_EU_bmi_data)$p.value,
+                            estimate =t.test(BMI ~REGION, USA_EU_bmi_data)$estimate)
+
+rownames(t_test_USA_EU) <- c("AMR", "EUR")
+
+ggtexttable(t_test_USA_EU, theme = ttheme("light"))
+```
+**Q2 answer:** P-value is lower than 0.05. Thus, there is significantly difference between Americas and European.
+
+# Packages & R verion 
+
+Tthe package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

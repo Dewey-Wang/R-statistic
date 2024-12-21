@@ -1,0 +1,161 @@
+---
+title: "Day 7 homework by Ding Yang Wang"
+output: html_document
+date: '2022-05-24'
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)    
+library(ggmap)
+library(CoordinateCleaner)
+library(leaflet)
+library(dplyr)
+library(mapproj)
+library(maps)
+library(countrycode)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+
+## Q1: Put the total COVID-19 cases on the map. Choose an early and a late date and make nice plot that illustrates the development over time.
+
+The function below is to prepare the data frame. The COVID data gets from `tidycovid19`. I choose **2021-05-23** as my late date and **2020-12-31** as my early date.
+```{r}
+covid_summary <- tidycovid19::download_merged_data(silent = TRUE, cached = TRUE)
+
+last_day <- covid_summary[(covid_summary$date == "2021-05-23"),]
+last_day <- last_day[,1:4] %>% na.omit()
+
+early_day <- covid_summary[(covid_summary$date == "2020-12-31"),]
+early_day <- early_day[,1:4] %>% na.omit() %>% filter(confirmed !=0)
+```
+
+The code here is to merge the data **countryref** and the data we want to let our data have the correct Longitude and Latitude.
+```{r}
+lat_lon_last_day<- countryref %>% 
+  group_by(iso3) %>%
+  summarise(Long = mean(centroid.lon),
+            Lat = mean(centroid.lat)) %>%
+  right_join(last_day, by= c("iso3"="iso3c")) 
+  
+
+pal_last_day <- colorNumeric(palette = "plasma",
+                    domain = lat_lon_last_day$confirmed)
+
+
+lat_lon_early_day<- countryref %>% 
+  group_by(iso3) %>%
+  summarise(Long = mean(centroid.lon),
+            Lat = mean(centroid.lat)) %>%
+  right_join(early_day, by= c("iso3"="iso3c")) 
+
+
+pal_early_day <- colorNumeric(palette = "plasma",
+                    domain = lat_lon_early_day$confirmed)
+
+```
+
+```{r, results='asix' }
+lat_lon_last_day %>% leaflet() %>%
+  addTiles() %>% addCircles(lng = ~Long,
+                            lat = ~Lat,
+                            radius = ~ confirmed*0.05, # unfortunately leaflet does not automatically 
+                            popup = ~ country,
+                            color = ~ pal_early_day(confirmed),
+                            fillOpacity = 0.5,
+                            stroke = FALSE) %>%
+  addLegend("bottomright", pal = pal_early_day, values = ~ confirmed, title = "Cases",
+            labFormat = labelFormat(prefix = ""),
+            opacity = 0.5) 
+```
+
+```{r, results='asix' }
+lat_lon_early_day %>% leaflet() %>%
+  addTiles() %>% addCircles(lng = ~Long,
+                            lat = ~Lat,
+                            radius = ~ confirmed*0.05, # unfortunately leaflet does not automatically 
+                            popup = ~ country,
+                            color = ~ pal_early_day(confirmed),
+                            fillOpacity = 0.5,
+                            stroke = FALSE) %>%
+  addLegend("bottomright", pal = pal_early_day, values = ~ confirmed, title = "Cases",
+            labFormat = labelFormat(prefix = ""),
+            opacity = 0.5)
+```
+
+**Answer:** As the graphs show, the USA has the highest amount of cases from the beginning to now.
+
+## Q2: The A. thaliana have many more data-points than are visible on the map and just from the points plot, we cannot tell where the most plants were sampled. This is called overplotting. How can you improve the sampling representation. The simple geom_jitter() instead of geom_point() was not enough. Try other ways for example change alpha. Another way is to use geom_hex(), what does it do and how does it help.
+
+The code below is to prepare the correct data frame.
+```{r}
+athaliana <-read.table("~/ppdata/swedishAthaliana.txt", sep="\t", head=T) ## read the data
+
+world_map <- map_data("world") %>% 
+  filter(region != "Antarctica")%>% 
+  mutate(iso3c = countrycode(region,
+                             origin = "country.name",
+                             destination = "iso3c"), 
+         continent = countrycode(iso3c,
+                                 origin ="iso3c",
+                                 destination="continent"))  ## Add the iso3 code, e.g. FIN, that is got from converting the country name, e.g. Finland. Also add the continent into the data frame. Furthermore, filte out the Antarctica.
+```
+
+Plot the map plot with `geom_hex` function.
+```{r, results='asix'}
+world_map %>% arrange(group,order) %>%
+  ggplot(aes(x=long, y=lat))+
+  geom_path(aes(group=group))+ 
+  geom_hex(data = athaliana, mapping = aes(x = Longitude, y = Latitude), bins = 60)+
+  theme_void()
+```
+
+From the Plot, we could know most of the data shows in Scandinavia. Thus, we plot Scandinavia with `geom_hex` function.
+```{r, results='asix'}
+scandinavia <-c ("Sweden", "Finland", "Norway", "Denmark") 
+map.scan <- world_map %>% filter( region %in% scandinavia ) ## the place we only want to map
+
+map.scan %>% arrange(group,order) %>%
+  ggplot(aes(x=long, y=lat))+
+  geom_path(aes(group=group))+
+  ylim(54,71)+
+  xlim(5,31)+
+  geom_hex(data = athaliana, mapping = aes(x = Longitude, y = Latitude), bins = 30)+
+  theme_void()
+```
+
+Here, I change the `alpha` to let the spots become more transparent.
+```{r, results='asix'}
+map.scan %>% arrange(group,order) %>%
+  ggplot(aes(x=long, y=lat))+
+  geom_path(aes(group=group))+
+  ylim(54,71)+
+  xlim(5,31)+
+  geom_jitter(data=athaliana,aes(x=Longitude, y=Latitude), color="darkgreen", alpha=0.02, size = 5)+
+  coord_map(projection = "mercator")+
+  theme_void()
+```
+**Answer:** For the plotting function, no matter `geom_jitter()`, `geom_point()` or `geom_hex()` could be useful in any situation. For this example, I like to use `geom_jitter()` personally. 
+
+
+
+## Packages & R verion
+… include the package versions that were used.
+```{r, results='asix'}
+sessionInfo()
+```

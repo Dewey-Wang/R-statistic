@@ -1,0 +1,142 @@
+---
+title: "Day 5 homework by Ding Yang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggpubr)
+library(GGally) 
+library(readr)
+library(dplyr)
+library(kableExtra)
+library(tidyverse)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+
+## Q1: Combine the excess mortality data with the general health data, that we provide in GHO_correlates.rds this contains:
+###    a. Current health expenditure per capita in USD 
+###    b. Percent Population living in urban areas
+###    c. Percent Population over 60
+
+
+```{r Table1, results='asis'}
+cor_GHO <- readRDS("/Users/deweywang/Desktop/LMU/2\ -\ semester/Pretty\ Plots\ -\ Visualizing\ Statistical\ Data/Day\ 5\ Correlation/Data\ for\ Correlations-20220517/covid19_correlates_GHO.rds")
+mortality <- read_csv("https://raw.githubusercontent.com/akarlinsky/world_mortality/main/world_mortality.csv")
+
+mortality <- rename(mortality, COUNTRY = iso3c)
+
+previous_years_mortality <- mortality %>% 
+  filter(year < 2020)
+pandemic_year<- mortality %>% 
+  filter(year >= 2020)
+
+mean_previous_years_mortality <- previous_years_mortality %>% 
+  group_by(COUNTRY) %>% 
+  summarise_at("deaths", mean, na.rm = TRUE)
+mean_pandemic_year <- pandemic_year %>% 
+  group_by(COUNTRY) %>% 
+  summarise_at("deaths", mean, na.rm = TRUE)
+
+excess_mortality2021 <- inner_join(mean_previous_years_mortality, mean_pandemic_year, by = "COUNTRY") %>%
+  rename( previous_death = deaths.x, pandemic_death = deaths.y)
+
+excess_mortality2021$ratio <- excess_mortality2021$pandemic_death/excess_mortality2021$previous_death
+
+
+excess_mortality2021 <- inner_join(excess_mortality2021, cor_GHO[,c(2:4,6)], by = "COUNTRY")
+excess_mortality2021 <- excess_mortality2021[,-(2:3)]
+
+excess_mortality2021 %>%
+  head()%>%
+  kbl() %>%
+  kable_styling() 
+```
+
+## Q2 Have a look at the distributions of those variables and their relation to excess mortality.
+
+```{r plot1, fig.width = 15, fig.height = 15}
+ggpairs(excess_mortality2021,
+        columns = c("ratio","Current health expenditure per capita in USD","Percent Population living in urban areas",
+                    "Percent Population over 60"), 
+        upper = list(continuous = "cor"),
+        lower = list(continuous = "smooth"))
+```
+
+## Q3: Choose an appropriate test statistic to see whether the observed relations are significant.
+
+
+First, we need to use `shapiro.test` function to see whether also factors are  normal distribution or not. In our case, non of the factors are normal distribution. Thus, we can't use parametric method for testing the correlation(**Pearson’s correlation**). We have to use non-parametric methods, which are **Spearman’s rho test** and **Kendall’s tau test**. Furthermore, our test statistic is not normally distributed, the p-values would not mean much. Therefore, we only need to focus on the value of the correlation.
+```{r}
+excess_mortality2021_rank <- excess_mortality2021 %>%
+  drop_na("Current health expenditure per capita in USD","ratio") %>% # exclude countries with NAs in any
+  mutate_if(is.numeric, rank)
+```
+  
+**Spearman's rank correlation**:
+```{r, results='asis'}
+excess_mortality2021_rank %>% 
+  na.omit() %>% 
+  cor.test( ~`Current health expenditure per capita in USD` + ratio,
+            data= . ,
+            method = "spearman")
+```
+
+
+**Kendall's rank correlation**:
+```{r, results='asis'}
+excess_mortality2021_rank %>% 
+  na.omit() %>% 
+  cor.test( ~`Current health expenditure per capita in USD` + ratio,
+            data= . ,
+            method = "kendall")
+```
+
+**Answer:** From the test we get above, we can see the `Spearman’s rho test` is a better test statistic for the correlation between the ratio and the Current health expenditure per capita in USD.
+
+
+## Q4: Make a ’pretty plot’ to visualize your conclusions. If you want a tile plot similar to Figure 7.3 check out GGally::ggcorr(). If you want to focus on the excess mortality you could represent only those coefficients as points or bars. Try to include information about significance and/or uncertainty.
+
+```{r plot2}
+excess_mortality2021 %>% 
+  na.omit() %>% 
+  cor.test( ~`Current health expenditure per capita in USD` + `ratio`,
+            data= . ,
+            method = "kendall")
+excess_mortality2021 %>%  ggplot(aes(y = ratio, x = `Current health expenditure per capita in USD`)) + geom_smooth(method = "gam")+
+geom_point()
+```
+
+The formula of the ratio: the average number of deaths in 2020-2021 / the average number of deaths in previous years (2015-2019)
+
+
+**Answer:** 
+
+According to the Q2 graph and Q3, we can the there is some correlation between the "ratio" and "Current health expenditure per capita in USD". The correlation is negative, which means that the higher "Current health expenditure per capita in USD" is, the lower the "ratio" will be. 
+
+From the graph here, we can conclude that it is true that the more money people spend in heath will somehow prevent people died in pandemic. However, the reduce rate has limitation.
+
+
+# Packages & R verion 
+
+... include the package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

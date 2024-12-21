@@ -1,0 +1,136 @@
+---
+title: "Day 2 homework by Ding Yang Wang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(png)
+library(tidyverse)
+library(readr)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+
+```
+
+# Q1: Compare the overall female vs. male Cancer mortality using a boxplot.
+
+Use the `ggplot` function to plot the boxplot.
+```{r plot1}
+  raw_cancer <- read.csv(file = "~/Desktop/LMU/2 - semester/Pretty Plots - Visualizing Statistical Data/Day 2/Data for barplots-20220511/Cancer_deaths_per100000_in_2016_WHO.csv",
+                           header = TRUE)
+raw_cancer <- raw_cancer %>% rename(year = Period,
+                              sex = Dim1,
+                              country = Location,
+                              value = First.Tooltip)
+
+cancer <- raw_cancer %>%
+  filter(value != "No data")
+
+cancer$value <- as.numeric(cancer$value) 
+
+cancer %>% ggplot(aes(x = sex, y = value, fill = sex)) + 
+  geom_boxplot()
+```
+
+# Q2: Load the data in bmi 2016.csv and produce a plot similar to Figure 3.4 for BMI.
+```{r,fig.width = 7, fig.height = 20}
+raw_bmi_data <- read.csv("~/Desktop/LMU/2 - semester/Pretty Plots - Visualizing Statistical Data/Day 2/Data for barplots-20220511/bmi_2016.csv",
+                     header = TRUE)
+
+bmi_data <- raw_bmi_data %>% 
+  filter(!is.na(BMI))
+
+bmi_data %>% ggplot(aes(y = reorder(COUNTRY, BMI), 
+                                 x = BMI, colour = sex, shape = sex)) + 
+  geom_point() +
+  xlab("BMI")+
+  theme(axis.title.y = element_blank(), axis.text.y =element_text(size=6)) + 
+  facet_grid(rows = "REGION" , scale = "free", space = "free")
+```
+
+# Q3: Choose two country from **COVID-19** data to compare and plot the total number of cases per day as they accumulate over time. HINT: Start at a time when at least one country has 1 million cases. Also plot the number of new COVID-19 cases since March 2021: Do you see any patterns and/or oddities?
+
+
+```{r}
+cases <- read_delim("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", delim = ",")
+deaths <- read_delim("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", delim = ",")
+deaths.lf <- deaths %>%
+  tidyr::pivot_longer(names_to = "date", values_to = "deaths",
+                      -(1:4)) %>%
+  dplyr::rename(country = "Country/Region") %>%
+  dplyr::rename(province = "Province/State")
+cases.lf <- cases %>%
+  tidyr::pivot_longer(names_to = "date", values_to = "cases",
+                      -(1:4)) %>%
+  dplyr::rename(country = "Country/Region") %>%
+  dplyr::rename(province = "Province/State")
+
+all <- deaths.lf %>%
+  inner_join(cases.lf, by = c("country", "province", "date",
+                              "Lat", "Long"))
+
+all.summarized <- all %>%
+  group_by(country, date) %>%
+  summarise(cases = sum(cases), deaths = sum(deaths)) %>%
+  ungroup()
+  
+all.summarized <- all.summarized %>%
+  mutate(date = as.Date(date, format = "%m/%d/%y")) %>%
+  arrange(date) %>%
+  group_by(country) %>%
+  mutate(newCases = cases - lag(cases), newDeaths = deaths -
+           lag(deaths)) %>%
+  filter(is.na(newCases) == F)
+# saveRDS(all.summarized, file='covid2022.rds') #save
+# tibble for day 2 exercises
+canada_china <- all.summarized %>%
+  filter(country %in% c("Canada", "China")) 
+
+
+
+
+which(canada_china$cases >= 1000000)[1]
+length(canada_china$date)
+
+
+canada_china %>% ggplot(aes(y = cases, x = date, fill = country)) +
+  geom_col()
+
+ggplot(canada_china[871:1680,], aes(x = date, y = cases, fill=country)) + 
+  geom_bar(position='dodge', stat = "identity")+
+  labs(title='The graph start at the monent that cases more than one million.')
+
+
+which(canada_china$date >= "2021-03-01")[1]
+
+March_canada_china <- canada_china[807:1680,]
+
+ggplot(March_canada_china, aes(x = date, y = cases, fill=country)) + 
+  geom_bar(position='dodge', stat = "identity")+
+  labs(title='The graph start at the monent that cases more than one million.')
+```
+# Packages & R verion 
+
+... include the package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

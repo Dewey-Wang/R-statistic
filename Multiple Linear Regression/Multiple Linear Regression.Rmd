@@ -1,0 +1,146 @@
+---
+title: "Day 6 homework by Ding Yang Wang"
+output: html_document
+date: '2022-05-20'
+---
+
+```{r setup, include=FALSE}
+library(GGally)
+library(dplyr)
+library(readr)
+library(tidycovid19)
+library(cowplot)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+
+```
+
+### Q1: In the Correlation exercise, the most signifcant GHO correlate of excess mortality per country in 2020 was the proportion of the population that is older than 65. What was puzzeling about this result is that the correlation appears to be negative. It makes more sense that per capita health expenditures decrease excess mortality. Moreover, the strongest correlation is between the proportion of old people and the health expenditures. Could the decrease in excess mortality with the fraction of 65 year olds be an indirect effect?
+
+The code below is to set up the data.
+```{r}
+GHO <- readRDS("/Users/deweywang/Desktop/LMU/2\ -\ semester/Pretty\ Plots\ -\ Visualizing\ Statistical\ Data/Day\ 5\ Correlation/Data\ for\ Correlations-20220517/covid19_correlates_GHO_UPDATED.rds")
+mortality <- read_csv("https://raw.githubusercontent.com/akarlinsky/world_mortality/main/world_mortality.csv")
+
+mortality <- rename(mortality, COUNTRY = iso3c)
+
+previous_years_mortality <- mortality %>% 
+  filter(year < 2020) %>% 
+  select(COUNTRY,country_name,deaths)
+pandemic_year<- mortality %>% 
+  filter(year >= 2020)%>% 
+  select(COUNTRY,country_name,deaths)
+
+mean_previous_years_mortality <- previous_years_mortality %>% 
+  group_by(COUNTRY, country_name) %>% 
+  summarise_all(mean, na.rm = TRUE)
+mean_pandemic_year <- pandemic_year %>% 
+  group_by(COUNTRY, country_name) %>% 
+  summarise_at("deaths", mean, na.rm = TRUE)
+
+excess_mortality2021 <- inner_join(mean_previous_years_mortality, mean_pandemic_year, by = c("COUNTRY", "country_name")) %>%
+  rename( previous_death = deaths.x, pandemic_death = deaths.y)
+
+excess_mortality2021$ratio <- excess_mortality2021$pandemic_death/excess_mortality2021$previous_death
+
+
+excess_mortality2021 <- inner_join(excess_mortality2021, GHO[,c(2:3,5:7)], by = "COUNTRY")
+excess_mortality2021 <- excess_mortality2021[,-(2:4)]
+
+excess_mortality2021<-rename(excess_mortality2021,
+       "excess_mort." =ratio,
+       "over_65" = over_65, #pop over 65
+       "urban" = `Percent Population living in urban areas`,
+       "health_exp" = `Current health expenditure per capita in USD`)
+excess_mortality2021 <- excess_mortality2021%>%
+  filter(!is.na(health_exp), !is.na(over_65), !is.na(urban))
+```
+
+#### a) Fit a multiple linear regression model to explain excess mortality.
+```{r}
+mod <- lm( excess_mort.  ~ over_65 + urban + health_exp, data= excess_mortality2021 ) 
+```
+
+
+#### b) Check the diagnostic plots and transform the date if necessary. Also check for outliers and try to remove them to improve the fit. Remember your y-variable is a ratio. If this is too problematic, you could try to use the original numbers of deaths in 2020 and the average of the prior 4 years.
+```{r, results='asis'}
+layout(matrix(1:4,2,2))
+mod
+plot(mod)
+```
+From the graph above, we could know that observation 70 is a outlier. Thus I want to remove it.
+
+```{r, results='asis'}
+excess_mortality2021<- excess_mortality2021[-70,]
+mod <- lm( excess_mort.  ~ over_65 + urban + health_exp, data= excess_mortality2021 ) 
+
+layout(matrix(1:4,2,2))
+plot(mod)
+```
+
+
+#### c) Describe your findings based on the final model. Don’t forget to link all your conclusions to the appropriate statistics.
+You can also embed plots, for example:
+
+**answer:** I don't really know what I need to desicribe about it.
+
+### Q2: Due to the dependence structure of the COVID-19 case numbers (it’s a growth curve). Linear models are not an appropriate statistic for timelines. However, LOESS curves can still be used for illustrative purposes, thus allowing us to visualize whether changes in trends coincide with various measures taken by the governments (e.g. lockdowns), vaccination progress or adaptations in the behavior of the population as measured by apple/google movement data. 
+
+
+```{r, results='asis'}
+COVID <- tidycovid19::download_merged_data(silent = TRUE, cached = TRUE)
+country_over_50k <- COVID %>% 
+  filter(confirmed>50000)
+  
+country_over_50k <- unique( country_over_50k$country)
+country_over_50k  
+
+confirmed_cases <- COVID%>% 
+  filter(country == "Taiwan")%>%
+  ggplot(aes(y=confirmed, x=date)) + 
+  geom_point() +
+  stat_smooth(method=loess, se=F)
+
+vaccinations <- COVID%>% 
+  filter(country == "Taiwan")%>%
+  ggplot(aes(y=total_vaccinations, x=date)) + 
+  geom_point() +
+  stat_smooth(method=loess, se=F)
+positive_rate <- COVID%>% 
+  filter(country == "Taiwan")%>%
+  ggplot(aes(y=positive_rate, x=date)) + 
+  geom_point() +
+  stat_smooth(method=loess, se=F)
+
+total_tests <- COVID%>% 
+  filter(country == "Taiwan")%>%
+  ggplot(aes(y=total_tests, x=date)) + 
+  geom_point() +
+  stat_smooth(method=loess, se=F)
+
+plot_grid(confirmed_cases, vaccinations,positive_rate,total_tests)
+```
+
+
+# Packages & R verion 
+
+... include the package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

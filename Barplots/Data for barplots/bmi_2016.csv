@@ -1,0 +1,385 @@
+Location,sex,BMI,REGION,WHO.region,COUNTRY
+Afghanistan,Male,22.6,EMR,Eastern Mediterranean,AFG
+Afghanistan,Female,24.1,EMR,Eastern Mediterranean,AFG
+Albania,Male,27,EUR,Europe,ALB
+Albania,Female,26.3,EUR,Europe,ALB
+Algeria,Male,24.7,AFR,Africa,DZA
+Algeria,Female,26.4,AFR,Africa,DZA
+Andorra,Male,27.3,EUR,Europe,AND
+Andorra,Female,26.1,EUR,Europe,AND
+Angola,Male,22.3,AFR,Africa,AGO
+Angola,Female,24.3,AFR,Africa,AGO
+Antigua and Barbuda,Male,25.7,AMR,Americas,ATG
+Antigua and Barbuda,Female,27.7,AMR,Americas,ATG
+Argentina,Male,27.8,AMR,Americas,ARG
+Argentina,Female,27.6,AMR,Americas,ARG
+Armenia,Male,25.6,EUR,Europe,ARM
+Armenia,Female,27,EUR,Europe,ARM
+Australia,Male,27.6,WPR,Western Pacific,AUS
+Australia,Female,26.7,WPR,Western Pacific,AUS
+Austria,Male,26.5,EUR,Europe,AUT
+Austria,Female,24.6,EUR,Europe,AUT
+Azerbaijan,Male,26.1,EUR,Europe,AZE
+Azerbaijan,Female,27.9,EUR,Europe,AZE
+Bahamas,Male,27.1,AMR,Americas,BHS
+Bahamas,Female,28.8,AMR,Americas,BHS
+Bahrain,Male,24.8,EMR,Eastern Mediterranean,BHR
+Bahrain,Female,24.8,EMR,Eastern Mediterranean,BHR
+Bangladesh,Male,21.3,SEAR,South-East Asia,BGD
+Bangladesh,Female,22,SEAR,South-East Asia,BGD
+Barbados,Male,26.4,AMR,Americas,BRB
+Barbados,Female,29.2,AMR,Americas,BRB
+Belarus,Male,26.4,EUR,Europe,BLR
+Belarus,Female,26.6,EUR,Europe,BLR
+Belgium,Male,26.6,EUR,Europe,BEL
+Belgium,Female,25.6,EUR,Europe,BEL
+Belize,Male,27.5,AMR,Americas,BLZ
+Belize,Female,30.5,AMR,Americas,BLZ
+Benin,Male,22.6,AFR,Africa,BEN
+Benin,Female,24.5,AFR,Africa,BEN
+Bhutan,Male,23.5,SEAR,South-East Asia,BTN
+Bhutan,Female,24.5,SEAR,South-East Asia,BTN
+Bolivia (Plurinational State of),Male,25.3,AMR,Americas,BOL
+Bolivia (Plurinational State of),Female,27.7,AMR,Americas,BOL
+Bosnia and Herzegovina,Male,26.4,EUR,Europe,BIH
+Bosnia and Herzegovina,Female,25.1,EUR,Europe,BIH
+Botswana,Male,22.5,AFR,Africa,BWA
+Botswana,Female,26.1,AFR,Africa,BWA
+Brazil,Male,26.3,AMR,Americas,BRA
+Brazil,Female,26.8,AMR,Americas,BRA
+Brunei Darussalam,Male,27.2,WPR,Western Pacific,BRN
+Brunei Darussalam,Female,27.2,WPR,Western Pacific,BRN
+Bulgaria,Male,27.1,EUR,Europe,BGR
+Bulgaria,Female,25.7,EUR,Europe,BGR
+Burkina Faso,Male,22.2,AFR,Africa,BFA
+Burkina Faso,Female,22.1,AFR,Africa,BFA
+Burundi,Male,21.8,AFR,Africa,BDI
+Burundi,Female,21.6,AFR,Africa,BDI
+Cabo Verde,Male,23.7,AFR,Africa,CPV
+Cabo Verde,Female,25.3,AFR,Africa,CPV
+Cambodia,Male,22.1,WPR,Western Pacific,KHM
+Cambodia,Female,22.3,WPR,Western Pacific,KHM
+Cameroon,Male,23.6,AFR,Africa,CMR
+Cameroon,Female,25.1,AFR,Africa,CMR
+Canada,Male,27.3,AMR,Americas,CAN
+Canada,Female,26.6,AMR,Americas,CAN
+Central African Republic,Male,22,AFR,Africa,CAF
+Central African Republic,Female,23.7,AFR,Africa,CAF
+Chad,Male,21.9,AFR,Africa,TCD
+Chad,Female,21.9,AFR,Africa,TCD
+Chile,Male,27.8,AMR,Americas,CHL
+Chile,Female,28.1,AMR,Americas,CHL
+China,Male,24.2,WPR,Western Pacific,CHN
+China,Female,23.5,WPR,Western Pacific,CHN
+Colombia,Male,25.8,AMR,Americas,COL
+Colombia,Female,26.6,AMR,Americas,COL
+Comoros,Male,23.3,AFR,Africa,COM
+Comoros,Female,25.6,AFR,Africa,COM
+Congo,Male,22.3,AFR,Africa,COG
+Congo,Female,24.1,AFR,Africa,COG
+Cook Islands,Male,32.7,WPR,Western Pacific,COK
+Cook Islands,Female,33.1,WPR,Western Pacific,COK
+Costa Rica,Male,26.8,AMR,Americas,CRI
+Costa Rica,Female,27.9,AMR,Americas,CRI
+Croatia,Male,28,EUR,Europe,HRV
+Croatia,Female,26.8,EUR,Europe,HRV
+Cuba,Male,25.2,AMR,Americas,CUB
+Cuba,Female,26,AMR,Americas,CUB
+Cyprus,Male,27.5,EUR,Europe,CYP
+Cyprus,Female,26,EUR,Europe,CYP
+Czechia,Male,27.9,EUR,Europe,CZE
+Czechia,Female,26.2,EUR,Europe,CZE
+Democratic People's Republic of Korea,Male,24.2,SEAR,South-East Asia,PRK
+Democratic People's Republic of Korea,Female,24,SEAR,South-East Asia,PRK
+Democratic Republic of the Congo,Male,21.3,AFR,Africa,COD
+Democratic Republic of the Congo,Female,22.6,AFR,Africa,COD
+Denmark,Male,26.2,EUR,Europe,DNK
+Denmark,Female,24.4,EUR,Europe,DNK
+Djibouti,Male,23.4,EMR,Eastern Mediterranean,DJI
+Djibouti,Female,24.6,EMR,Eastern Mediterranean,DJI
+Dominica,Male,25,AMR,Americas,DMA
+Dominica,Female,29,AMR,Americas,DMA
+Dominican Republic,Male,25.5,AMR,Americas,DOM
+Dominican Republic,Female,27.4,AMR,Americas,DOM
+Ecuador,Male,26.6,AMR,Americas,ECU
+Ecuador,Female,27.9,AMR,Americas,ECU
+Egypt,Male,27.8,EMR,Eastern Mediterranean,EGY
+Egypt,Female,31.4,EMR,Eastern Mediterranean,EGY
+El Salvador,Male,26.8,AMR,Americas,SLV
+El Salvador,Female,28.3,AMR,Americas,SLV
+Equatorial Guinea,Male,22.3,AFR,Africa,GNQ
+Equatorial Guinea,Female,25.9,AFR,Africa,GNQ
+Eritrea,Male,20.2,AFR,Africa,ERI
+Eritrea,Female,21.1,AFR,Africa,ERI
+Estonia,Male,26.9,EUR,Europe,EST
+Estonia,Female,25.9,EUR,Europe,EST
+Eswatini,Male,24.5,AFR,Africa,SWZ
+Eswatini,Female,28.9,AFR,Africa,SWZ
+Ethiopia,Male,20.1,AFR,Africa,ETH
+Ethiopia,Female,21.1,AFR,Africa,ETH
+Fiji,Male,26.6,WPR,Western Pacific,FJI
+Fiji,Female,28.8,WPR,Western Pacific,FJI
+Finland,Male,26.4,EUR,Europe,FIN
+Finland,Female,25.5,EUR,Europe,FIN
+France,Male,25.9,EUR,Europe,FRA
+France,Female,24.2,EUR,Europe,FRA
+Gabon,Male,24,AFR,Africa,GAB
+Gabon,Female,26.5,AFR,Africa,GAB
+Gambia,Male,23.4,AFR,Africa,GMB
+Gambia,Female,24.5,AFR,Africa,GMB
+Georgia,Male,27.5,EUR,Europe,GEO
+Georgia,Female,27.6,EUR,Europe,GEO
+Germany,Male,27.3,EUR,Europe,DEU
+Germany,Female,25.8,EUR,Europe,DEU
+Ghana,Male,22.5,AFR,Africa,GHA
+Ghana,Female,25.2,AFR,Africa,GHA
+Greece,Male,27.5,EUR,Europe,GRC
+Greece,Female,26.7,EUR,Europe,GRC
+Grenada,Male,25.2,AMR,Americas,GRD
+Grenada,Female,28.8,AMR,Americas,GRD
+Guatemala,Male,25.7,AMR,Americas,GTM
+Guatemala,Female,27.3,AMR,Americas,GTM
+Guinea,Male,22.4,AFR,Africa,GIN
+Guinea,Female,23.4,AFR,Africa,GIN
+Guinea-Bissau,Male,22.8,AFR,Africa,GNB
+Guinea-Bissau,Female,24,AFR,Africa,GNB
+Guyana,Male,25.1,AMR,Americas,GUY
+Guyana,Female,27.7,AMR,Americas,GUY
+Haiti,Male,26.5,AMR,Americas,HTI
+Haiti,Female,24.2,AMR,Americas,HTI
+Honduras,Male,25.9,AMR,Americas,HND
+Honduras,Female,27.6,AMR,Americas,HND
+Hungary,Male,28.2,EUR,Europe,HUN
+Hungary,Female,26.4,EUR,Europe,HUN
+Iceland,Male,27,EUR,Europe,ISL
+Iceland,Female,25.5,EUR,Europe,ISL
+India,Male,21.7,SEAR,South-East Asia,IND
+India,Female,21.9,SEAR,South-East Asia,IND
+Indonesia,Male,22.5,SEAR,South-East Asia,IDN
+Indonesia,Female,23.8,SEAR,South-East Asia,IDN
+Iran (Islamic Republic of),Male,25.2,EMR,Eastern Mediterranean,IRN
+Iran (Islamic Republic of),Female,27,EMR,Eastern Mediterranean,IRN
+Iraq,Male,27.8,EMR,Eastern Mediterranean,IRQ
+Iraq,Female,29.7,EMR,Eastern Mediterranean,IRQ
+Ireland,Male,27.9,EUR,Europe,IRL
+Ireland,Female,27,EUR,Europe,IRL
+Israel,Male,27.6,EUR,Europe,ISR
+Israel,Female,26.9,EUR,Europe,ISR
+Italy,Male,26.5,EUR,Europe,ITA
+Italy,Female,24.7,EUR,Europe,ITA
+Jamaica,Male,25.8,AMR,Americas,JAM
+Jamaica,Female,29.6,AMR,Americas,JAM
+Japan,Male,23.6,WPR,Western Pacific,JPN
+Japan,Female,21.8,WPR,Western Pacific,JPN
+Jordan,Male,28.3,EMR,Eastern Mediterranean,JOR
+Jordan,Female,29.8,EMR,Eastern Mediterranean,JOR
+Kazakhstan,Male,26.3,EUR,Europe,KAZ
+Kazakhstan,Female,26.4,EUR,Europe,KAZ
+Kenya,Male,22.1,AFR,Africa,KEN
+Kenya,Female,24.5,AFR,Africa,KEN
+Kiribati,Male,29,WPR,Western Pacific,KIR
+Kiribati,Female,31.1,WPR,Western Pacific,KIR
+Kuwait,Male,29,EMR,Eastern Mediterranean,KWT
+Kuwait,Female,30.4,EMR,Eastern Mediterranean,KWT
+Kyrgyzstan,Male,25.9,EUR,Europe,KGZ
+Kyrgyzstan,Female,27.2,EUR,Europe,KGZ
+Lao People's Democratic Republic,Male,22.7,WPR,Western Pacific,LAO
+Lao People's Democratic Republic,Female,23.1,WPR,Western Pacific,LAO
+Latvia,Male,27,EUR,Europe,LVA
+Latvia,Female,26.2,EUR,Europe,LVA
+Lebanon,Male,27.9,EMR,Eastern Mediterranean,LBN
+Lebanon,Female,27.4,EMR,Eastern Mediterranean,LBN
+Lesotho,Male,22.7,AFR,Africa,LSO
+Lesotho,Female,27,AFR,Africa,LSO
+Liberia,Male,23.1,AFR,Africa,LBR
+Liberia,Female,25.1,AFR,Africa,LBR
+Libya,Male,26.9,EMR,Eastern Mediterranean,LBY
+Libya,Female,29.2,EMR,Eastern Mediterranean,LBY
+Lithuania,Male,27,EUR,Europe,LTU
+Lithuania,Female,25.8,EUR,Europe,LTU
+Luxembourg,Male,27,EUR,Europe,LUX
+Luxembourg,Female,25.6,EUR,Europe,LUX
+Madagascar,Male,21.5,AFR,Africa,MDG
+Madagascar,Female,21.1,AFR,Africa,MDG
+Malawi,Male,22.6,AFR,Africa,MWI
+Malawi,Female,23.2,AFR,Africa,MWI
+Malaysia,Male,25.3,WPR,Western Pacific,MYS
+Malaysia,Female,26.1,WPR,Western Pacific,MYS
+Maldives,Male,24.6,SEAR,South-East Asia,MDV
+Maldives,Female,26.3,SEAR,South-East Asia,MDV
+Mali,Male,22.9,AFR,Africa,MLI
+Mali,Female,23.1,AFR,Africa,MLI
+Malta,Male,27.7,EUR,Europe,MLT
+Malta,Female,26.3,EUR,Europe,MLT
+Marshall Islands,Male,28.8,WPR,Western Pacific,MHL
+Marshall Islands,Female,30.4,WPR,Western Pacific,MHL
+Mauritania,Male,23.2,AFR,Africa,MRT
+Mauritania,Female,26.6,AFR,Africa,MRT
+Mauritius,Male,24.6,AFR,Africa,MUS
+Mauritius,Female,25.9,AFR,Africa,MUS
+Mexico,Male,27.5,AMR,Americas,MEX
+Mexico,Female,28.4,AMR,Americas,MEX
+Micronesia (Federated States of),Male,28.1,WPR,Western Pacific,FSM
+Micronesia (Federated States of),Female,31.4,WPR,Western Pacific,FSM
+Monaco,Male,NA,EUR,Europe,MCO
+Monaco,Female,NA,EUR,Europe,MCO
+Mongolia,Male,25.9,WPR,Western Pacific,MNG
+Mongolia,Female,26.6,WPR,Western Pacific,MNG
+Montenegro,Male,27,EUR,Europe,MNE
+Montenegro,Female,26.1,EUR,Europe,MNE
+Morocco,Male,25.4,EMR,Eastern Mediterranean,MAR
+Morocco,Female,26.5,EMR,Eastern Mediterranean,MAR
+Mozambique,Male,22,AFR,Africa,MOZ
+Mozambique,Female,23.4,AFR,Africa,MOZ
+Myanmar,Male,22.2,SEAR,South-East Asia,MMR
+Myanmar,Female,23,SEAR,South-East Asia,MMR
+Namibia,Male,22.9,AFR,Africa,NAM
+Namibia,Female,25.3,AFR,Africa,NAM
+Nauru,Male,32.2,WPR,Western Pacific,NRU
+Nauru,Female,32.7,WPR,Western Pacific,NRU
+Nepal,Male,22.5,SEAR,South-East Asia,NPL
+Nepal,Female,22.5,SEAR,South-East Asia,NPL
+Netherlands,Male,26,EUR,Europe,NLD
+Netherlands,Female,25.1,EUR,Europe,NLD
+New Zealand,Male,28.1,WPR,Western Pacific,NZL
+New Zealand,Female,28,WPR,Western Pacific,NZL
+Nicaragua,Male,26.5,AMR,Americas,NIC
+Nicaragua,Female,27.9,AMR,Americas,NIC
+Niger,Male,21.4,AFR,Africa,NER
+Niger,Female,22.3,AFR,Africa,NER
+Nigeria,Male,22.5,AFR,Africa,NGA
+Nigeria,Female,23.9,AFR,Africa,NGA
+Niue,Male,31.4,WPR,Western Pacific,NIU
+Niue,Female,33.3,WPR,Western Pacific,NIU
+Norway,Male,27.3,EUR,Europe,NOR
+Norway,Female,26.1,EUR,Europe,NOR
+Oman,Male,26.4,EMR,Eastern Mediterranean,OMN
+Oman,Female,26.3,EMR,Eastern Mediterranean,OMN
+Pakistan,Male,23.3,EMR,Eastern Mediterranean,PAK
+Pakistan,Female,24.6,EMR,Eastern Mediterranean,PAK
+Palau,Male,29.5,WPR,Western Pacific,PLW
+Palau,Female,29.6,WPR,Western Pacific,PLW
+Panama,Male,26.2,AMR,Americas,PAN
+Panama,Female,27.7,AMR,Americas,PAN
+Papua New Guinea,Male,25.3,WPR,Western Pacific,PNG
+Papua New Guinea,Female,26,WPR,Western Pacific,PNG
+Paraguay,Male,26.5,AMR,Americas,PRY
+Paraguay,Female,26.9,AMR,Americas,PRY
+Peru,Male,26.2,AMR,Americas,PER
+Peru,Female,27.1,AMR,Americas,PER
+Philippines,Male,22.8,WPR,Western Pacific,PHL
+Philippines,Female,23.5,WPR,Western Pacific,PHL
+Poland,Male,27.4,EUR,Europe,POL
+Poland,Female,25.9,EUR,Europe,POL
+Portugal,Male,26.1,EUR,Europe,PRT
+Portugal,Female,25.1,EUR,Europe,PRT
+Qatar,Male,28.8,EMR,Eastern Mediterranean,QAT
+Qatar,Female,30.1,EMR,Eastern Mediterranean,QAT
+Republic of Korea,Male,24.4,WPR,Western Pacific,KOR
+Republic of Korea,Female,23.1,WPR,Western Pacific,KOR
+Republic of Moldova,Male,26.6,EUR,Europe,MDA
+Republic of Moldova,Female,27.3,EUR,Europe,MDA
+Romania,Male,27,EUR,Europe,ROU
+Romania,Female,26.8,EUR,Europe,ROU
+Russian Federation,Male,25.8,EUR,Europe,RUS
+Russian Federation,Female,26.4,EUR,Europe,RUS
+Rwanda,Male,21.3,AFR,Africa,RWA
+Rwanda,Female,22.8,AFR,Africa,RWA
+Saint Kitts and Nevis,Male,28.2,AMR,Americas,KNA
+Saint Kitts and Nevis,Female,30.7,AMR,Americas,KNA
+Saint Lucia,Male,29.6,AMR,Americas,LCA
+Saint Lucia,Female,30.4,AMR,Americas,LCA
+Saint Vincent and the Grenadines,Male,26.3,AMR,Americas,VCT
+Saint Vincent and the Grenadines,Female,28.2,AMR,Americas,VCT
+Samoa,Male,30.4,WPR,Western Pacific,WSM
+Samoa,Female,34.1,WPR,Western Pacific,WSM
+San Marino,Male,NA,EUR,Europe,SMR
+San Marino,Female,NA,EUR,Europe,SMR
+Sao Tome and Principe,Male,23.9,AFR,Africa,STP
+Sao Tome and Principe,Female,25.6,AFR,Africa,STP
+Saudi Arabia,Male,28,EMR,Eastern Mediterranean,SAU
+Saudi Arabia,Female,29.2,EMR,Eastern Mediterranean,SAU
+Senegal,Male,21.8,AFR,Africa,SEN
+Senegal,Female,24,AFR,Africa,SEN
+Serbia,Male,26.6,EUR,Europe,SRB
+Serbia,Female,25.5,EUR,Europe,SRB
+Seychelles,Male,25.5,AFR,Africa,SYC
+Seychelles,Female,27.9,AFR,Africa,SYC
+Sierra Leone,Male,21.9,AFR,Africa,SLE
+Sierra Leone,Female,23.5,AFR,Africa,SLE
+Singapore,Male,24.3,WPR,Western Pacific,SGP
+Singapore,Female,23,WPR,Western Pacific,SGP
+Slovakia,Male,27.3,EUR,Europe,SVK
+Slovakia,Female,25.5,EUR,Europe,SVK
+Slovenia,Male,26.6,EUR,Europe,SVN
+Slovenia,Female,26.5,EUR,Europe,SVN
+Solomon Islands,Male,25.7,WPR,Western Pacific,SLB
+Solomon Islands,Female,26.9,WPR,Western Pacific,SLB
+Somalia,Male,22.5,EMR,Eastern Mediterranean,SOM
+Somalia,Female,23.9,EMR,Eastern Mediterranean,SOM
+South Africa,Male,25,AFR,Africa,ZAF
+South Africa,Female,29.3,AFR,Africa,ZAF
+South Sudan,Male,NA,AFR,Africa,LAO
+South Sudan,Female,NA,AFR,Africa,LAO
+Spain,Male,27,EUR,Europe,ESP
+Spain,Female,24.8,EUR,Europe,ESP
+Sri Lanka,Male,22.5,SEAR,South-East Asia,LKA
+Sri Lanka,Female,23.7,SEAR,South-East Asia,LKA
+Sudan,Male,NA,EMR,Eastern Mediterranean,SDN
+Sudan,Female,NA,EMR,Eastern Mediterranean,SDN
+Suriname,Male,25.4,AMR,Americas,SUR
+Suriname,Female,27.7,AMR,Americas,SUR
+Sweden,Male,26.7,EUR,Europe,SWE
+Sweden,Female,25.4,EUR,Europe,SWE
+Switzerland,Male,26.7,EUR,Europe,CHE
+Switzerland,Female,23.7,EUR,Europe,CHE
+Syrian Arab Republic,Male,27.4,EMR,Eastern Mediterranean,SYR
+Syrian Arab Republic,Female,29.2,EMR,Eastern Mediterranean,SYR
+Tajikistan,Male,25.8,EUR,Europe,TJK
+Tajikistan,Female,26.3,EUR,Europe,TJK
+Thailand,Male,23.9,SEAR,South-East Asia,THA
+Thailand,Female,25,SEAR,South-East Asia,THA
+Timor-Leste,Male,21.3,SEAR,South-East Asia,TLS
+Timor-Leste,Female,21.3,SEAR,South-East Asia,TLS
+Togo,Male,22.5,AFR,Africa,TGO
+Togo,Female,24.5,AFR,Africa,TGO
+Tonga,Male,30.5,WPR,Western Pacific,TON
+Tonga,Female,33.7,WPR,Western Pacific,TON
+Trinidad and Tobago,Male,26.6,AMR,Americas,TTO
+Trinidad and Tobago,Female,28.6,AMR,Americas,TTO
+Tunisia,Male,25.5,EMR,Eastern Mediterranean,TUN
+Tunisia,Female,27.1,EMR,Eastern Mediterranean,TUN
+Turkey,Male,27.1,EUR,Europe,TUR
+Turkey,Female,28.6,EUR,Europe,TUR
+Turkmenistan,Male,26.5,EUR,Europe,TKM
+Turkmenistan,Female,26.6,EUR,Europe,TKM
+Tuvalu,Male,30,WPR,Western Pacific,TUV
+Tuvalu,Female,31.6,WPR,Western Pacific,TUV
+Uganda,Male,21.6,AFR,Africa,UGA
+Uganda,Female,23.3,AFR,Africa,UGA
+Ukraine,Male,26.9,EUR,Europe,UKR
+Ukraine,Female,26.2,EUR,Europe,UKR
+United Arab Emirates,Male,28,EMR,Eastern Mediterranean,ARE
+United Arab Emirates,Female,29.4,EMR,Eastern Mediterranean,ARE
+United Kingdom of Great Britain and Northern Ireland,Male,27.3,EUR,Europe,GBR
+United Kingdom of Great Britain and Northern Ireland,Female,27,EUR,Europe,GBR
+United Republic of Tanzania,Male,22.3,AFR,Africa,TZA
+United Republic of Tanzania,Female,24.1,AFR,Africa,TZA
+United States of America,Male,28.8,AMR,Americas,USA
+United States of America,Female,28.9,AMR,Americas,USA
+Uruguay,Male,27.3,AMR,Americas,URY
+Uruguay,Female,27.3,AMR,Americas,URY
+Uzbekistan,Male,26.3,EUR,Europe,UZB
+Uzbekistan,Female,27.4,EUR,Europe,UZB
+Vanuatu,Male,25.6,WPR,Western Pacific,VUT
+Vanuatu,Female,26.8,WPR,Western Pacific,VUT
+Venezuela (Bolivarian Republic of),Male,26.6,AMR,Americas,VEN
+Venezuela (Bolivarian Republic of),Female,26.8,AMR,Americas,VEN
+Viet Nam,Male,21.9,WPR,Western Pacific,VNM
+Viet Nam,Female,21.9,WPR,Western Pacific,VNM
+Yemen,Male,23.6,EMR,Eastern Mediterranean,YEM
+Yemen,Female,24.1,EMR,Eastern Mediterranean,YEM
+Zambia,Male,21.3,AFR,Africa,ZMB
+Zambia,Female,23.7,AFR,Africa,ZMB
+Zimbabwe,Male,22.2,AFR,Africa,ZWE
+Zimbabwe,Female,25.3,AFR,Africa,ZWE

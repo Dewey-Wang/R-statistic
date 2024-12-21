@@ -1,0 +1,133 @@
+Bundesland,BundeslandId,Percent,LowerCL,UpperCL,Standard,counts,total,education,gender,age_group
+Deutschland,0,87.163,83.483,90.121,0,820,900,all,female,18 - 29 Jahre
+Deutschland,0,87.417,85.069,89.441,0,1922,2101,all,both,18 - 29 Jahre
+Deutschland,0,88.295,85.18,90.827,0,1092,1188,all,male,18 - 29 Jahre
+Deutschland,0,82.854,80.063,85.326,0,1651,1895,all,female,30 - 44 Jahre
+Deutschland,0,83.163,81.215,84.946,0,3306,3768,all,both,30 - 44 Jahre
+Deutschland,0,83.96,81.194,86.387,0,1650,1863,all,male,30 - 44 Jahre
+Deutschland,0,66.036,63.949,68.062,0,3516,4832,all,female,45 - 64 Jahre
+Deutschland,0,65.567,63.984,67.116,0,6564,8976,all,both,45 - 64 Jahre
+Deutschland,0,65.162,62.759,67.49,0,3037,4126,all,male,45 - 64 Jahre
+Deutschland,0,55.256,52.585,57.897,0,2078,3301,all,female,65 - 79 Jahre
+Deutschland,0,56.399,54.377,58.4,0,3879,6046,all,both,65 - 79 Jahre
+Deutschland,0,57.742,54.641,60.783,0,1795,2734,all,male,65 - 79 Jahre
+Deutschland,0,42.536,37.869,47.34,0,485,1025,all,female,80 + Jahre
+Deutschland,0,46.395,42.794,50.034,0,918,1805,all,both,80 + Jahre
+Deutschland,0,52.561,47.087,57.975,0,429,770,all,male,80 + Jahre
+Bremen,4,58.835,46.393,70.241,1,50,85,all,female,Gesamt
+Bremen,4,61.689,46.246,75.086,0,50,85,all,female,Gesamt
+Mecklenburg-Vorpommern,13,63.332,54.025,71.741,0,148,233,all,female,Gesamt
+Mecklenburg-Vorpommern,13,69.705,60.97,77.215,1,148,233,all,female,Gesamt
+Thüringen,16,48.158,39.956,56.46,0,149,268,all,female,Gesamt
+Thüringen,16,56.049,47.63,64.134,1,149,268,all,female,Gesamt
+Sachsen-Anhalt,15,57.439,49.318,65.179,0,174,273,all,female,Gesamt
+Sachsen-Anhalt,15,61.726,53.214,69.574,1,174,273,all,female,Gesamt
+Hamburg,2,65.264,57.253,72.495,0,257,367,all,female,Gesamt
+Hamburg,2,65.894,58.397,72.673,1,257,367,all,female,Gesamt
+Brandenburg,12,57.764,50.894,64.345,0,278,432,all,female,Gesamt
+Brandenburg,12,63.542,56.881,69.721,1,278,432,all,female,Gesamt
+Schleswig-Holstein,1,68.843,62.118,74.858,0,284,405,all,female,Gesamt
+Schleswig-Holstein,1,72.104,65.313,78.012,1,284,405,all,female,Gesamt
+Sachsen,14,67.877,61.811,73.394,0,321,473,all,female,Gesamt
+Sachsen,14,71.439,65.101,77.032,1,321,473,all,female,Gesamt
+Rheinland-Pfalz,7,74.812,68.902,79.926,0,371,496,all,female,Gesamt
+Rheinland-Pfalz,7,76.91,70.958,81.953,1,371,496,all,female,Gesamt
+Hessen,6,71.722,66.89,76.101,0,533,733,all,female,Gesamt
+Hessen,6,73.053,68.194,77.415,1,533,733,all,female,Gesamt
+Niedersachsen,3,70.059,65.518,74.237,0,694,922,all,female,Gesamt
+Niedersachsen,3,71.969,67.391,76.132,1,694,922,all,female,Gesamt
+Saarland,10,63.877,59.135,68.362,0,758,1115,all,female,Gesamt
+Saarland,10,67.803,62.527,72.661,1,758,1115,all,female,Gesamt
+Berlin,11,65.043,60.449,69.373,0,792,1148,all,female,Gesamt
+Berlin,11,65.726,61.2,69.983,1,792,1148,all,female,Gesamt
+Baden-Württemberg,8,75.294,71.787,78.496,0,1006,1295,all,female,Gesamt
+Baden-Württemberg,8,76.374,72.857,79.562,1,1006,1295,all,female,Gesamt
+Bayern,9,74.314,70.881,77.471,0,1248,1589,all,female,Gesamt
+Bayern,9,75.912,72.604,78.937,1,1248,1589,all,female,Gesamt
+Nordrhein-Westfalen,5,64.562,61.401,67.6,0,1473,2100,all,female,Gesamt
+Nordrhein-Westfalen,5,67.078,63.916,70.093,1,1473,2100,all,female,Gesamt
+Deutschland,0,68.568,67.248,69.858,0,8550,11953,all,female,Gesamt
+Deutschland,0,80.706,79.302,82.037,1,4095,5222,advanced,female,Gesamt
+Deutschland,0,82.055,80.645,83.384,0,4095,5222,advanced,female,Gesamt
+Deutschland,0,69.125,67.52,70.685,0,3990,5848,intermediate,female,Gesamt
+Deutschland,0,70.482,68.819,72.092,1,3990,5848,intermediate,female,Gesamt
+Deutschland,0,53.515,49.495,57.49,0,443,855,basic,female,Gesamt
+Deutschland,0,58.931,54.336,63.376,1,443,855,basic,female,Gesamt
+Bremen,4,63.681,55.344,71.268,1,115,179,all,both,Gesamt
+Bremen,4,65.292,54.167,74.965,0,115,179,all,both,Gesamt
+Mecklenburg-Vorpommern,13,62.093,54.629,69.025,0,283,421,all,both,Gesamt
+Mecklenburg-Vorpommern,13,67.412,60.802,73.395,1,283,421,all,both,Gesamt
+Thüringen,16,54.28,47.923,60.501,0,313,510,all,both,Gesamt
+Thüringen,16,60.435,54.349,66.214,1,313,510,all,both,Gesamt
+Sachsen-Anhalt,15,60.754,54.812,66.394,0,353,541,all,both,Gesamt
+Sachsen-Anhalt,15,64.614,58.641,70.165,1,353,541,all,both,Gesamt
+Hamburg,2,65.668,59.474,71.371,0,454,642,all,both,Gesamt
+Hamburg,2,66.875,61.348,71.973,1,454,642,all,both,Gesamt
+Schleswig-Holstein,1,69.115,63.992,73.807,0,528,738,all,both,Gesamt
+Schleswig-Holstein,1,70.926,65.831,75.544,1,528,738,all,both,Gesamt
+Brandenburg,12,62.281,57.261,67.05,0,551,813,all,both,Gesamt
+Brandenburg,12,66.816,61.838,71.444,1,551,813,all,both,Gesamt
+Sachsen,14,65.584,61.06,69.841,0,642,937,all,both,Gesamt
+Sachsen,14,68.306,63.626,72.642,1,642,937,all,both,Gesamt
+Rheinland-Pfalz,7,73.695,69.188,77.755,0,733,962,all,both,Gesamt
+Rheinland-Pfalz,7,74.908,70.305,79.011,1,733,962,all,both,Gesamt
+Hessen,6,70.439,66.811,73.827,0,1064,1427,all,both,Gesamt
+Hessen,6,71.28,67.649,74.657,1,1064,1427,all,both,Gesamt
+Niedersachsen,3,70.743,67.443,73.837,0,1361,1800,all,both,Gesamt
+Niedersachsen,3,71.998,68.648,75.12,1,1361,1800,all,both,Gesamt
+Saarland,10,67.367,64.072,70.498,0,1377,1973,all,both,Gesamt
+Saarland,10,70.477,66.992,73.738,1,1377,1973,all,both,Gesamt
+Berlin,11,70.127,66.971,73.103,1,1489,2076,all,both,Gesamt
+Berlin,11,70.146,66.941,73.164,0,1489,2076,all,both,Gesamt
+Baden-Württemberg,8,75.509,73.044,77.817,0,1974,2540,all,both,Gesamt
+Baden-Württemberg,8,75.887,73.383,78.225,1,1974,2540,all,both,Gesamt
+Bayern,9,74.484,72.058,76.768,0,2341,2992,all,both,Gesamt
+Bayern,9,75.317,72.919,77.568,1,2341,2992,all,both,Gesamt
+Nordrhein-Westfalen,5,68.363,66.143,70.502,0,2978,4102,all,both,Gesamt
+Nordrhein-Westfalen,5,70.311,68.115,72.417,1,2978,4102,all,both,Gesamt
+Deutschland,0,69.915,68.962,70.851,0,16589,22696,all,both,Gesamt
+Deutschland,0,81.522,80.617,82.393,0,9149,11632,advanced,both,Gesamt
+Deutschland,0,81.641,80.724,82.523,1,9149,11632,advanced,both,Gesamt
+Deutschland,0,68.663,67.412,69.888,0,6631,9662,intermediate,both,Gesamt
+Deutschland,0,69.456,68.167,70.714,1,6631,9662,intermediate,both,Gesamt
+Deutschland,0,57.266,54.066,60.406,0,759,1339,basic,both,Gesamt
+Deutschland,0,59.866,56.323,63.308,1,759,1339,basic,both,Gesamt
+Bremen,4,67.65,56.315,77.232,1,65,94,all,male,Gesamt
+Bremen,4,69.024,52.362,81.876,0,65,94,all,male,Gesamt
+Mecklenburg-Vorpommern,13,63.049,51.598,73.198,0,134,185,all,male,Gesamt
+Mecklenburg-Vorpommern,13,66.918,57.002,75.53,1,134,185,all,male,Gesamt
+Thüringen,16,61.707,52.125,70.457,0,163,240,all,male,Gesamt
+Thüringen,16,65.802,57.036,73.607,1,163,240,all,male,Gesamt
+Sachsen-Anhalt,15,64.7,55.871,72.628,0,179,266,all,male,Gesamt
+Sachsen-Anhalt,15,68.029,59.478,75.519,1,179,266,all,male,Gesamt
+Hamburg,2,66.626,56.703,75.267,0,196,272,all,male,Gesamt
+Hamburg,2,69.05,60.799,76.243,1,196,272,all,male,Gesamt
+Schleswig-Holstein,1,69.386,61.374,76.376,0,243,332,all,male,Gesamt
+Schleswig-Holstein,1,69.728,61.941,76.525,1,243,332,all,male,Gesamt
+Brandenburg,12,67.411,60.024,74.024,0,273,380,all,male,Gesamt
+Brandenburg,12,70.543,62.979,77.122,1,273,380,all,male,Gesamt
+Sachsen,14,63.353,56.553,69.66,0,320,461,all,male,Gesamt
+Sachsen,14,65.353,58.389,71.716,1,320,461,all,male,Gesamt
+Rheinland-Pfalz,7,72.342,65.25,78.464,0,361,464,all,male,Gesamt
+Rheinland-Pfalz,7,72.81,65.572,79.013,1,361,464,all,male,Gesamt
+Hessen,6,68.966,63.411,74.022,0,528,691,all,male,Gesamt
+Hessen,6,69.358,63.849,74.364,1,528,691,all,male,Gesamt
+Saarland,10,71.304,66.765,75.45,0,617,854,all,male,Gesamt
+Saarland,10,73.367,68.802,77.483,1,617,854,all,male,Gesamt
+Niedersachsen,3,71.455,66.546,75.904,0,667,878,all,male,Gesamt
+Niedersachsen,3,72.027,67.015,76.544,1,667,878,all,male,Gesamt
+Berlin,11,74.393,70.038,78.31,1,687,917,all,male,Gesamt
+Berlin,11,75.396,71.06,79.272,0,687,917,all,male,Gesamt
+Baden-Württemberg,8,75.742,72.107,79.04,1,964,1238,all,male,Gesamt
+Baden-Württemberg,8,76.088,72.558,79.294,0,964,1238,all,male,Gesamt
+Bayern,9,75.044,71.564,78.228,0,1086,1392,all,male,Gesamt
+Bayern,9,75.144,71.639,78.348,1,1086,1392,all,male,Gesamt
+Nordrhein-Westfalen,5,72.451,69.327,75.371,0,1501,1993,all,male,Gesamt
+Nordrhein-Westfalen,5,73.61,70.528,76.476,1,1501,1993,all,male,Gesamt
+Deutschland,0,71.553,70.169,72.899,0,8003,10681,all,male,Gesamt
+Deutschland,0,81.2,80.005,82.34,0,5034,6382,advanced,male,Gesamt
+Deutschland,0,82.651,81.449,83.791,1,5034,6382,advanced,male,Gesamt
+Deutschland,0,68.31,66.352,70.205,0,2630,3791,intermediate,male,Gesamt
+Deutschland,0,68.593,66.61,70.511,1,2630,3791,intermediate,male,Gesamt
+Deutschland,0,61.444,55.959,66.654,1,313,475,basic,male,Gesamt
+Deutschland,0,63.794,58.452,68.816,0,313,475,basic,male,Gesamt

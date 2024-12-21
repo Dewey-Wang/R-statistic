@@ -1,0 +1,388 @@
+---
+title: "Q1 Penguin Flipper length"
+author: "Ding Yang Wang"
+date: '2022-05-31'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(ggpubr)
+library(knitr)
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+
+## Q1: (a) Please improve the Figure! The data come with an R pacakage, just call palmerpenguins
+
+To visualize whether flipper length changed over time in different penguin species,sex, and species, I will use the average flipper length to see visualize the plot.
+The penguins data is from `palmerpenguins` package.
+```{r , results='asis'}
+penguins <- palmerpenguins ::penguins
+
+penguins$year <- as.character.Date(penguins$year)
+
+av_group_sex_species_year <- penguins %>% 
+  na.omit() %>% 
+  group_by(sex, species, year) %>% 
+  summarise_at("flipper_length_mm", mean, na.rm = TRUE)
+
+colnames(av_group_sex_species_year)[4] <- "av_flipper"
+
+
+av_species_year <- penguins %>% na.omit() %>% 
+  group_by( species, year) %>% 
+  summarise_at("flipper_length_mm", mean, na.rm = TRUE)
+colnames(av_species_year)[3] <- "av_flipper"
+
+av_species_year$sex <- "both"
+
+av_year <- rbind(av_group_sex_species_year, av_species_year)
+
+
+av_year %>% ggplot( aes(x=year, y=av_flipper, color = sex, group = sex)) +
+  geom_point()+
+  geom_smooth()+
+  facet_grid(~species)+
+  labs(x = "Year",
+       y = "Average flipper length(mm)",
+       title = "Figure 1: The trend of growing flipper length by year")+
+  theme_linedraw()+
+  scale_color_manual(values=c( "#838391", "#fc6f6f", "#346eeb"))
+```
+
+**Answer:** 
+  
+  From Fig. 1, we could easily see the difference in the average flipper length every year by sex and species. I didn't add the standard deviation because all we want is to visualize the trend of the size difference. Here, the average flipper length of Adelie, Gentoo, and female Chinstrap becomes larger every year. The only exception is male Chinstrap. The average flipper length of male Chinstrap is larger in 2008 but become smaller in 2009.
+  
+  In the overall average, the trend of all species getting larger every year.
+
+
+
+## Q1: (b) Test whether the year has a significant impact on flipper size. Please include the reasoning for your choice of test and prove that the assumptions made by the test statistics are fulfilled.
+
+we need to consider whether we need to use **t-test** or  **Wilcoxon-rank sum test**.
+
+**T-test** is only for the samples that is normal distribution.
+
+**Wilcoxon-rank sum test** is non-parametric version of the t-test, data don't need to be normally distributed.
+
+Thus, we need to first see whether the samples are normal distribution or not. There are several ways to see whether the samples are normal distribution or not. We will use **Shapiro-Wilk normality test** here. If function `shapiro.test` shows the p-value > 0.05, it means it is normal distribution.
+
+```{r , results='asis', fig.height = 8,fig.width = 5}
+test_normal_d <- data_frame( sex = rep(c("female", "male", "both"), c(9,9,9)),
+                             species = rep(rep(c("Adelie", "Chinstrap", "Gentoo"), c(3,3,3)),3),
+                             year = rep(c("2007", "2008", "2009"), 9),
+                             "p-value" = c(
+                               shapiro.test(filter(penguins,sex == "female" & species == "Adelie" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Adelie" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Adelie" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Chinstrap" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Chinstrap" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Chinstrap" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Gentoo" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Gentoo" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "female" & species == "Gentoo" & year == "2009")$flipper_length_mm)$p.value,
+                               
+                               shapiro.test(filter(penguins,sex == "male" & species == "Adelie" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Adelie" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Adelie" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Chinstrap" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Chinstrap" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Chinstrap" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Gentoo" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Gentoo" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins,sex == "male" & species == "Gentoo" & year == "2009")$flipper_length_mm)$p.value,
+                               
+                               shapiro.test(filter(penguins, species == "Adelie" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Adelie" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Adelie" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Chinstrap" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Chinstrap" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Chinstrap" & year == "2009")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Gentoo" & year == "2007")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Gentoo" & year == "2008")$flipper_length_mm)$p.value,
+                               shapiro.test(filter(penguins, species == "Gentoo" & year == "2009")$flipper_length_mm)$p.value
+                               )
+                             )
+
+test_normal_d <- test_normal_d %>%
+  mutate(">0.05" = case_when ( test_normal_d$`p-value` >= "0.05" ~ "TRUE",
+                               test_normal_d$`p-value` < "0.05" ~ ""))
+
+test_normal_d_table<- ggtexttable(test_normal_d, theme = ttheme("light"),  cols = colnames(test_normal_d), rows = NULL)%>%
+  tab_add_vline(at.column = 2:4, column.side = "left",
+               from.row = 2, linetype = 2)%>%
+  tab_add_title(text = "Table 1: Shapiro-Wilk normality test")
+
+test_normal_d_table
+```
+
+From Table 1, we could know that most of the data is normally distributed. Some of them are not. For the comparsion of significant, if both samples are normally distributed, I will use **t-test**; if one of the samples are not normally distributed, I will use **Wilcoxon-rank sum test**. 
+
+
+
+The code below is to prepare the data.
+```{r , results='asis'}
+#
+f_a7 <-penguins %>%
+  na.omit() %>% 
+  filter(year == "2007" & sex == "female"& species== "Adelie")
+m_a7 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & sex == "male"& species== "Adelie")
+b_a7 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & species== "Adelie")
+f_a8 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "female"& species== "Adelie")
+m_a8 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "male"& species== "Adelie")
+b_a8 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & species== "Adelie")
+f_a9 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "female"& species== "Adelie")
+m_a9 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "male"& species== "Adelie")
+b_a9 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & species== "Adelie")
+#
+f_c7 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & sex == "female"& species== "Chinstrap")
+m_c7 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & sex == "male"& species== "Chinstrap")
+b_c7 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & species== "Chinstrap")
+f_c8 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "female"& species== "Chinstrap")
+m_c8 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "male"& species== "Chinstrap")
+b_c8 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & species== "Chinstrap")
+f_c9 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "female"& species== "Chinstrap")
+m_c9 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "male"& species== "Chinstrap")
+b_c9 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & species== "Chinstrap")
+#
+f_g7 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & sex == "female"& species== "Gentoo")
+m_g7 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & sex == "male"& species== "Gentoo")
+b_g7 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2007" & species== "Gentoo")
+f_g8 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "female"& species== "Gentoo")
+m_g8 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & sex == "male"& species== "Gentoo")
+b_g8 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2008" & species== "Gentoo")
+f_g9 <-penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "female"& species== "Gentoo")
+m_g9 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & sex == "male"& species== "Gentoo")
+b_g9 <- penguins %>%
+  na.omit()%>% 
+  filter(year == "2009" & species== "Gentoo")
+```
+
+Because some of the data needs to use **t-test**, I need to use `var.test` function to test whether the data of the two variances are equal. If the p-value of `var.test` is > 0.05, the hypothesis of two variances are equal.
+```{r , results='asis', fig.height = 7,fig.width = 5}
+var_test <- data.frame( "type vs type" = c("male_Adelie 2007 vs. 2008" ,
+                                  "male_Adelie 2008 vs. 2009" ,
+                                  "female_Adelie 2007 vs. 2008",
+                                  "female_Adelie 2008 vs. 2009",
+                                  "male_Chinstrap 2007 vs. 2008",
+                                  "male_Chinstrap 2008 vs. 2009",
+                                  "female_Chinstrap 2007 vs. 2008",
+                                  "female_Chinstrap 2008 vs. 2009",
+                                  "male_Gentoo 2007 vs. 2008",
+                                  "male_Gentoo 2008 vs. 2009",
+                                  "female_Gentoo 2007 vs. 2008",
+                                  "female_Gentoo 2008 vs. 2009",
+                                  "both_Adelie 2007 vs. 2008",
+                                  "both_Adelie 2008 vs. 2009",
+                                  "both_Chinstrap 2007 vs. 2008",
+                                  "both_Chinstrap 2008 vs. 2009",
+                                  "both_Gentoo 2007 vs. 2008",
+                                  "both_Gentoo 2008 vs. 2009"),
+                        "p-value" = c(var.test((m_a7$flipper_length_mm),(m_a8$flipper_length_mm))$p.value,
+                                      var.test((m_a8$flipper_length_mm),(m_a9$flipper_length_mm))$p.value,
+                                      var.test((f_a7$flipper_length_mm),(f_a8$flipper_length_mm))$p.value,
+                                      var.test((f_a8$flipper_length_mm),(f_a9$flipper_length_mm))$p.value,
+                                      var.test((m_c7$flipper_length_mm),(m_c8$flipper_length_mm))$p.value,
+                                      var.test((m_c8$flipper_length_mm),(m_c9$flipper_length_mm))$p.value,
+                                      var.test((f_c7$flipper_length_mm),(f_c8$flipper_length_mm))$p.value,
+                                      var.test((f_c8$flipper_length_mm),(f_c9$flipper_length_mm))$p.value,
+                                      "NA",
+                                      var.test((m_g8$flipper_length_mm),(m_g9$flipper_length_mm))$p.value,
+                                      "NA",
+                                      "NA",
+                                      var.test((b_a7$flipper_length_mm),(b_a8$flipper_length_mm))$p.value,
+                                      var.test((b_a8$flipper_length_mm),(b_a9$flipper_length_mm))$p.value,
+                                      var.test((b_c7$flipper_length_mm),(b_c8$flipper_length_mm))$p.value,
+                                      var.test((b_c8$flipper_length_mm),(b_c9$flipper_length_mm))$p.value,
+                                      "NA",
+                                      "NA"
+                                      
+)
+                        )
+var_test$p.value <- as.numeric(var_test$p.value)
+var_test <- var_test %>%
+  mutate(">0.05" = case_when ( var_test$p.value >= "0.05" ~ "TRUE",
+                               var_test$p.value < "0.05" ~ ""))
+
+var_test_table<- ggtexttable(var_test, theme = ttheme("light"),  cols = colnames(var_test), rows = NULL)%>%
+  tab_add_vline(at.column = 2:3, column.side = "left",
+               from.row = 2, linetype = 2)%>%
+  tab_add_title(text = "Table 2: Variance test") %>%
+  tab_add_footnote(text = "*NA means one of the samples doesn't fit t-test.", size = 10, face = "italic")
+
+var_test_table
+```
+
+From Table 2, it shows that we can set `var.equal = TRUE` in t-test for all of the t-test.
+```{r , results='asis', fig.height = 6.5,fig.width = 6}
+
+Wilcox_result_year <- data.frame(
+  "statistic" = c(t.test((m_a7$flipper_length_mm),(m_a8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((m_a8$flipper_length_mm),(m_a9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((f_a7$flipper_length_mm),(f_a8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((f_a8$flipper_length_mm),(f_a9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((m_c7$flipper_length_mm),(m_c8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((m_c8$flipper_length_mm),(m_c9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((f_c7$flipper_length_mm),(f_c8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((f_c8$flipper_length_mm),(f_c9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  wilcox.test((m_g7$flipper_length_mm),(m_g8$flipper_length_mm))$statistic,
+                  t.test((m_g8$flipper_length_mm),(m_g9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  wilcox.test((f_g7$flipper_length_mm),(f_g8$flipper_length_mm))$statistic,
+                  wilcox.test((f_g8$flipper_length_mm),(f_g9$flipper_length_mm))$statistic,
+                  t.test((b_a7$flipper_length_mm),(b_a8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((b_a8$flipper_length_mm),(b_a9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((b_c7$flipper_length_mm),(b_c8$flipper_length_mm),var.equal = TRUE)$statistic,
+                  t.test((b_c8$flipper_length_mm),(b_c9$flipper_length_mm),var.equal = TRUE)$statistic,
+                  wilcox.test((b_g7$flipper_length_mm),(b_g8$flipper_length_mm))$statistic,
+                  wilcox.test((b_g8$flipper_length_mm),(b_g9$flipper_length_mm))$statistic
+  ),
+  "p-value" = c(t.test((m_a7$flipper_length_mm),(m_a8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((m_a8$flipper_length_mm),(m_a9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((f_a7$flipper_length_mm),(f_a8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((f_a8$flipper_length_mm),(f_a9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((m_c7$flipper_length_mm),(m_c8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((m_c8$flipper_length_mm),(m_c9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((f_c7$flipper_length_mm),(f_c8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((f_c8$flipper_length_mm),(f_c9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  wilcox.test((m_g7$flipper_length_mm),(m_g8$flipper_length_mm))$p.value,
+                  t.test((m_g8$flipper_length_mm),(m_g9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  wilcox.test((f_g7$flipper_length_mm),(f_g8$flipper_length_mm))$p.value,
+                  wilcox.test((f_g8$flipper_length_mm),(f_g9$flipper_length_mm))$p.value,
+                  t.test((b_a7$flipper_length_mm),(b_a8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((b_a8$flipper_length_mm),(b_a9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((b_c7$flipper_length_mm),(b_c8$flipper_length_mm),var.equal = TRUE)$p.value,
+                  t.test((b_c8$flipper_length_mm),(b_c9$flipper_length_mm),var.equal = TRUE)$p.value,
+                  wilcox.test((b_g7$flipper_length_mm),(b_g8$flipper_length_mm))$p.value,
+                  wilcox.test((b_g8$flipper_length_mm),(b_g9$flipper_length_mm))$p.value
+                ),
+  "test strategy" = c(rep("t-test",8), 
+                      "Wilcox-test",
+                      "t-test",
+                      "Wilcox-test",
+                      "Wilcox-test",
+                      rep("t-test",4),
+                      "Wilcox-test",
+                      "Wilcox-test")
+  )
+
+
+rownames(Wilcox_result_year) <- c("male_Adelie 2007 vs. 2008" ,
+                                  "male_Adelie 2008 vs. 2009" ,
+                                  "female_Adelie 2007 vs. 2008",
+                                  "female_Adelie 2008 vs. 2009",
+                                  "male_Chinstrap 2007 vs. 2008",
+                                  "male_Chinstrap 2008 vs. 2009",
+                                  "female_Chinstrap 2007 vs. 2008",
+                                  "female_Chinstrap 2008 vs. 2009",
+                                  "male_Gentoo 2007 vs. 2008",
+                                  "male_Gentoo 2008 vs. 2009",
+                                  "female_Gentoo 2007 vs. 2008",
+                                  "female_Gentoo 2008 vs. 2009",
+                                  "both_Adelie 2007 vs. 2008",
+                                  "both_Adelie 2008 vs. 2009",
+                                  "both_Chinstrap 2007 vs. 2008",
+                                  "both_Chinstrap 2008 vs. 2009",
+                                  "both_Gentoo 2007 vs. 2008",
+                                  "both_Gentoo 2008 vs. 2009")
+
+
+Wilcox_result_year <- Wilcox_result_year %>%
+  mutate(sig = case_when (p.value > 0.05 ~ "", 
+                          p.value <= 0.05 & p.value > 0.01 ~ "*", 
+                          p.value <= 0.01 & p.value > 0.001 ~ "**", 
+                          p.value <=0.001 ~ "***"))
+
+Wilcox_result_year_table<-ggtexttable(Wilcox_result_year, theme = ttheme("blank"))
+
+Wilcox_result_year_table%>%
+  tab_add_hline(at.row = c(1, 2), row.side = "top", linewidth = 3, linetype = 1) %>%
+  tab_add_hline(at.row = c(19), row.side = "bottom", linewidth = 3, linetype = 1) %>%
+  tab_add_vline(at.column = 2:5, column.side = "left",
+               from.row = 2, linetype = 2) %>%
+  tab_add_title(text = "Table 3: Test whether the year has a significant impact on flipper size")%>%
+  tab_add_footnote(text = "* = p-value <= 0.05 & > 0.01  
+  ** = p-value <= 0.01 & > 0.001
+  *** = p-value <= 0.001              ", size = 10, face = "italic")
+```
+
+**Answer:** 
+  
+  From Table 1, we could know that 2008 female Gentoo, 2007 male Gentoo, both gender 2007 Gentoo, and both gender 2008 Gentoo are not normally distributed. For the rest of them are normally distributed. Thus, I used **Wilcoxon-rank sum test** for those are not normally distributed; for the rest of them that are normally distributed, I use **t-test**.
+  
+  After **Wilcoxon-rank sum test** and **t-test**, we could see only the flipper length of **male Adelie in 2008**, **male Chinstrap in 2008**, **male Gentoo in 2008**, **both gender Adelie in 2008**, and **both gender Chinstrap in 2008** have significant flipper size difference than the previous year. For the rest of them, we can't deny that there could have a null hypothesis.
+
+# Packages & R verion 
+
+... include the package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```

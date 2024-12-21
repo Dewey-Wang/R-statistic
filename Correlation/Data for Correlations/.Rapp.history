@@ -1,0 +1,2 @@
+load("/Users/deweywang/Desktop/LMU/2 - semester/Pretty Plots - Visualizing Statistical Data/Day 5/Data for Correlations-20220517/covid19_correlates_GHO_UPDATED.rds")
+load("/Users/deweywang/Desktop/LMU/2 - semester/Pretty Plots - Visualizing Statistical Data/Day 5 Correlation/Data for Correlations-20220517/allRisk_2016.rds")

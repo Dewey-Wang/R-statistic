@@ -1,0 +1,167 @@
+---
+title: "final-Q3"
+author: "Ding Yang Wang"
+date: '2022-06-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(zoo)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(stringr)
+library(ggpubr)
+
+knitr::opts_chunk$set(echo=T,
+                      eval=T, 
+                      message = F,
+                      warning=F, 
+                      error = F,
+                      cache = F, 
+                      tidy = T, 
+                      size="footnotesize",
+                      fig.pos='H',
+                      results='hide',
+                      fig.lp='fig:',
+                      fig.align = 'center',
+                      fig.path='figures/example-', 
+                      cache.path = 'cache/example-',
+                      tidy.opts=list(width.cutoff=60)
+                     )
+```
+
+## Q3: Make a plot that illustrates which state (Bundesland) had the most and which the least days with an incidence > 100 per 7 days per 100,000 since 1. November 2020. Also indicate the number of days a county had an incidence rate > 200.
+
+Data Preparation:
+```{r, results='asis'}
+Germany_RKI <- read.csv("Data for termpaper-20220528/covid_19_RKI_Bundeslaender2022.csv")
+colnames(Germany_RKI)[c(1,6)] <- c("state id", "state")
+
+Germany_RKI <- Germany_RKI[,-(2:3)] ##remove dupilcated data
+
+Germany_RKI$date <- as.Date.factor(Germany_RKI$date)
+
+Germany_after_Nov_first <- filter(Germany_RKI[,c(1:6)],  date >="2020-11-01")
+
+length(unique(Germany_after_Nov_first$date)) == (max(Germany_after_Nov_first$date) - min(Germany_after_Nov_first$date)+1) ## Test whether the data is recorded everyday
+```
+
+The data were recorded every day. Hence, we could manage the data easier. However, I want to look into the least last few days to double-check the data.
+```{r, fig.width = 8, fig.height= 14, results='asis'}
+group_date_state <- Germany_after_Nov_first %>% 
+  group_by(date,state, `state id`, population_state)%>% 
+  summarise_all(sum) %>%
+  arrange(`state id`)
+
+group_date_state$`incidence rate` <- group_date_state$cases/group_date_state$population_state * 100000 ## calculate the incidence rate
+
+look_data_tail <- filter(group_date_state,  date >="2022-05-19")
+
+look_data_tail_table<- ggtexttable(look_data_tail, theme = ttheme("light"),  cols = colnames(look_data_tail), rows = NULL)%>%
+  tab_add_vline(at.column = 2:7, column.side = "left",
+               from.row = 2, linetype = 2)%>%
+  tab_add_title(text = "Table 1: Look data tail")
+
+look_data_tail_table
+```
+
+The data above shows that not every state has recorded the cases on 2022/05/21 and 2022/05/22. Besides, the data that was recorded on that day didn't make any sense. Thus, I remove the data on 2022/05/21 and 2022/05/22. 
+
+To use the `rollsum` function, the data needs to be in a matrix or list format. Here, I make the data frame format into matrix format because I have several states that need to observe. `rollsum(align = "right" )` means calculating the incidence rate until the last day.
+```{r}
+group_date_state <- filter(group_date_state,  date <="2022-05-20")
+
+state_vs_date <- group_date_state[,c(1:2,7)] %>% pivot_wider(id_cols = date, names_from = state, values_from = `incidence rate`)
+
+state_vs_date_matrix <- zoo(data.matrix(state_vs_date[,-1]), state_vs_date$date)## convert data frame into matrix and add the date into its' row name
+
+roll_matrix <- rollsum(state_vs_date_matrix, 7, align =  "right")
+```
+
+After finishing doing the `rollsum`, I converted the matrix into data frame again to let me easier to do the ggplot.
+
+Here, I plot the frequency of each state which has an incidence rate > 100. 
+```{r}
+roll_state <- data.frame(roll_matrix)
+
+roll_state$date <- rownames(roll_state)  
+
+## The reason why I change their name here is because the name will be converted into NA if the name contain "." or "-".
+colnames(roll_state)[c(1,5,7,8,13,15)] <-  c("SchleswigHolstein",
+                                             "NordrheinWestfalen",
+                                             "RheinlandPfalz"   ,    
+                                             "BadenWürttemberg" ,
+                                             "MecklenburgVorpommern",
+                                             "SachsenAnhalt" )
+
+
+roll_state_long<-roll_state %>% pivot_longer(names_to = "state",
+                                             values_to = "incidence rate",
+                                             -17) 
+
+roll_state_long$date <- as.Date.factor(roll_state_long$date)
+
+##Here, I name their name back.
+roll_state_long$state[roll_state_long$state == "SchleswigHolstein"] <- "Schleswig-Holstein"
+roll_state_long$state[roll_state_long$state == "NordrheinWestfalen"] <- "Nordrhein-Westfalen"
+roll_state_long$state[roll_state_long$state == "RheinlandPfalz"] <- "Rheinland-Pfalz"
+roll_state_long$state[roll_state_long$state == "BadenWürttemberg"] <- "Baden-Württemberg"
+roll_state_long$state[roll_state_long$state == "MecklenburgVorpommern"] <- "Mecklenburg-Vorpommern"
+roll_state_long$state[roll_state_long$state == "SachsenAnhalt"] <- "Sachsen-Anhalt"
+
+over_one_hundred <- roll_state_long %>% filter(`incidence rate` > 100)
+
+count_100<- as.data.frame(table(over_one_hundred$state)) ## Get their frequency
+
+count_100_sort <- arrange(count_100,Freq) ## preparing for further use
+```
+
+Here, I plot the frequency of each state which has an incidence rate > 200. 
+```{r, results='asis'}
+over_two_hundred <- roll_state_long %>% filter(`incidence rate` > 200)
+
+count_200<- as.data.frame(table(over_two_hundred$state)) ## Get their frequency
+```
+
+Merge the count of incidence rate > 100 and the count of incidence rate > 200.
+```{r,fig.width = 12 ,results='asis'}
+merage_100_200 <- count_100 %>% inner_join(count_200, by = "Var1") 
+
+colnames(merage_100_200)[2:3] <- c("incidence >100", "incidence >200")
+
+merage_100_200$`incidence >100` <- merage_100_200$`incidence >100` - merage_100_200$`incidence >200`
+
+merage_100_200<-merage_100_200 %>% pivot_longer(names_to = ">100 or >200",
+                                             values_to = "Freq",
+                                             -1) 
+
+merage_100_200$Var1 <- factor(merage_100_200$Var1, levels = count_100_sort$Var1)## sort their frequency to let the plot be more readable.
+
+
+merage_100_200 %>% ggplot()+
+  geom_col(aes(x = Var1, y = Freq, fill = `>100 or >200`))+
+  theme(axis.title.x = element_text(face="bold"),
+        axis.title.y = element_text(face="bold"),
+        plot.title = element_text(face="bold",size = 15),
+        axis.line = element_line(colour = "grey50"),
+        panel.background = element_blank())+
+  labs(x = "State", 
+       y = "Number",
+       title = "Figure 1",
+       subtitle = "Count of incidence rate per last 7 days",
+       caption = "*From 1. November 2020 to 20. May 2022\n*Daily incidence rate formula = state population/daily cases * 100000")+
+  geom_text(data = count_100, aes(label = Freq, y = Freq, x = Var1), vjust = -.5, size = 3) +
+  geom_text(data = count_200, aes(label = Freq, y = Freq, x = Var1), vjust = 1.5, size = 3) +
+  guides( x= guide_axis(n.dodge = 2))+ 
+  scale_fill_manual(values=c( "#56B4E9", "#999999"))
+```
+
+# Packages & R verion 
+
+The package versions that were used.
+
+```{r sessionInfo, results='markup', echo=T,size="tiny"}
+sessionInfo()
+```
