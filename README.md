@@ -15,13 +15,16 @@ Welcome to my repository summarizing key concepts, techniques, and applications 
 ### **2. Data Visualization**
 #### Barplots  
 - Visualizing categorical comparisons with `geom_bar` and `geom_col`.
+   ![Barplots](./Practical%20term%20paper/figures/Rplot12.pdf)
 
 #### Distributions  
 - Plotting histograms, density plots, and Q-Q plots for data distribution analysis.
+   ![Distributions](./Distributions/figures/example-plot1-1.png)
 
 #### Regression  
 - Creating scatter plots with regression lines and interpreting model results.
-
+  ![Regression](./Multiple%20Linear%20Regression/figures/example-unnamed-chunk-4-1.png)
+  
 #### Spatial Data  
 - Mapping geographical data using `geom_polygon` and `coord_map`.
 
