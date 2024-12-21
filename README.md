@@ -15,7 +15,7 @@ Welcome to my repository summarizing key concepts, techniques, and applications 
 ### **2. Data Visualization**
 #### Barplots  
 - Visualizing categorical comparisons with `geom_bar` and `geom_col`.
-   ![Barplots](./Practical%20term%20paper/figures/Rplot12.pdf)
+   ![Barplots](./Practical%20term%20paper/figures/Rplot12.png)
 
 #### Distributions  
 - Plotting histograms, density plots, and Q-Q plots for data distribution analysis.
@@ -86,7 +86,7 @@ This project analyzed the impact of the COVID-19 pandemic on Taiwan's bio-indust
 2. Correlation matrix of bio-index and related factors.  
 
 **Example Output:**  
-[View Poster](./final%20project/presentation/poster.pdf)
+[View Poster](./final%20project/presentation/poster.png)
 
 **The extra Gif for the infection of Taiwan**
 
