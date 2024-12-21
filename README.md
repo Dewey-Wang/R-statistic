@@ -34,7 +34,7 @@ Welcome to my repository summarizing key concepts, techniques, and applications 
 
 ---
 
-## **Practical analysis with Term Paper: Analysis of German Population Health and COVID-19 Impact**
+## **Practical Analysis with Term Paper: Analysis of German Population Health and COVID-19 Impact**
 
 The term paper focused on three main questions:
 
@@ -43,7 +43,7 @@ The term paper focused on three main questions:
 - Improved visualization of data trends and performed statistical tests to determine significant effects.
 
 **Example Output:**
-![Penguin Flipper Length](images/penguin-flipper.png)
+[View Results](./Practical%20term%20paper/final-Q1.html)
 
 ---
 
@@ -52,12 +52,14 @@ The term paper focused on three main questions:
 - Visualized differences between the "old" and "new" federal states (East vs. West Germany).
 
 **Visual Outputs:**
-1. Impact of gender and education level.
-2. Differences across age groups and genders.
-3. Mapped percentages of people assessing their health as good across Germany.
+1. Impact of gender and education level.  
+   ![Gender and Education](./Practical%20term%20paper/figures/example-unnamed-chunk-3-1.png)
 
-**Panel Output:**
-![Health Panel](images/health-panel.png)
+2. Differences across age groups and genders.  
+   ![Age and Gender](./Practical%20term%20paper/figures/example-unnamed-chunk-5-1.png)
+
+3. Mapped percentages of people assessing their health as good across Germany.  
+   ![Health Map](./Practical%20term%20paper/figures/example-unnamed-chunk-8-1.png)
 
 ---
 
@@ -66,7 +68,7 @@ The term paper focused on three main questions:
 - Visualized states with more than 100 and 200 cases per 100,000 inhabitants over rolling 7-day periods.
 
 **Example Output:**
-![COVID-19 Incidence](images/covid-incidence.png)
+![COVID-19 Incidence](./Practical%20term%20paper/figures/example-unnamed-chunk-6-1.png)
 
 ---
 
@@ -77,9 +79,15 @@ This project analyzed the impact of the COVID-19 pandemic on Taiwan's bio-indust
 - Visualizations showing data trends and insights.
 
 **Key Plots:**
-1. Bio-stock index before and after COVID-19.
-2. Correlation matrix of bio-index and related factors.
+1. Bio-stock index before and after COVID-19.  
+2. Correlation matrix of bio-index and related factors.  
 
+**Example Output:**  
+[View Poster](./final%20project/presentation/poster.pdf)
+
+**The extra Gif for the infection of Taiwan**
+The plot indicatet the infection population in Taiwan over time. This is not related to my final project. But U think it's cool that use R to make a gif file
+![Description of GIF](./final project/figures/Taiwan.gif)
 ---
 
 ## **How to Use This Repository**
