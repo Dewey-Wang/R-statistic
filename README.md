@@ -90,7 +90,7 @@ This project analyzed the impact of the COVID-19 pandemic on Taiwan's bio-indust
 
 **The extra Gif for the infection of Taiwan**
 
-The plot indicatet the infection population in Taiwan over time. This is not related to my final project. But U think it's cool that use R to make a gif file.
+The plot indicated the infection population in Taiwan over time. This is not related to my final project. But I think it's cool that used R to make a gif file.
 
 ![Description of GIF](./final%20project/figures/Taiwan.gif)
 ---
