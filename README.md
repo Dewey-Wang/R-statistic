@@ -86,7 +86,7 @@ This project analyzed the impact of the COVID-19 pandemic on Taiwan's bio-indust
 2. Correlation matrix of bio-index and related factors.  
 
 **Example Output:**  
-[View Poster](./final%20project/presentation/poster.png)
+![Poster](./final%20project/presentation/poster.png)
 
 **The extra Gif for the infection of Taiwan**
 
