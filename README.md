@@ -15,7 +15,7 @@ Welcome to my repository summarizing key concepts, techniques, and applications 
 ### **2. Data Visualization**
 #### Barplots  
 - Visualizing categorical comparisons with `geom_bar` and `geom_col`.
-   ![Barplots](./Practical%20term%20paper/figures/Rplot12.png)
+   ![Barplots](./final%20project/figures/Rplot12.png)
 
 #### Distributions  
 - Plotting histograms, density plots, and Q-Q plots for data distribution analysis.
